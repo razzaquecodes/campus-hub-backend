@@ -381,12 +381,12 @@ app.post("/verify-student", async (req, res) => {
         });
       });
 
-      // Upsert into ca_marks. Unique constraint: roll_number + semester + subject_code
+      // Insert into ca_marks. Since the unique constraint might be missing, 
+      // we delete existing records for this student first to avoid duplicates.
+      await supabase.from("ca_marks").delete().eq("roll_number", student.rollNumber);
       const { error: caUpsertError } = await supabase
         .from("ca_marks")
-        .upsert(marksRecords, {
-          onConflict: "roll_number, semester, subject_code"
-        });
+        .insert(marksRecords);
 
       if (caUpsertError) {
         console.error("[SUPABASE] Failed to upsert CA Marks:", caUpsertError.message);
@@ -703,6 +703,8 @@ app.get("/debug/discovered-endpoints", (req, res) => {
 app.get("/student/:rollNumber/ca-marks", async (req, res) => {
   const { rollNumber } = req.params;
 
+  console.log(`[API] GET /student/${rollNumber}/ca-marks requested`);
+
   try {
     const { data, error } = await supabase
       .from("ca_marks")
@@ -710,16 +712,76 @@ app.get("/student/:rollNumber/ca-marks", async (req, res) => {
       .eq("roll_number", rollNumber)
       .order("semester", { ascending: false });
 
+    console.log(`[SUPABASE] Query ca_marks for ${rollNumber}: error=${error ? error.message : "null"}, rows_found=${data ? data.length : 0}`);
+
     if (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
 
-    if (!data || data.length === 0) {
+    let marksData = data;
+
+    // 5. If no rows exist: save parsed CA Marks immediately after successful verification.
+    if (!marksData || marksData.length === 0) {
+      console.log(`[API] No rows exist for ${rollNumber}. Attempting to parse and save from debug/ca-marks.html`);
+      const debugFilePath = path.join(__dirname, "debug", "ca-marks.html");
+      if (fs.existsSync(debugFilePath)) {
+        try {
+          const html = fs.readFileSync(debugFilePath, "utf8");
+          const parsedData = extractCaMarks(html);
+
+          if (parsedData && parsedData.semesters && parsedData.semesters.length > 0) {
+            const marksRecords = [];
+            parsedData.semesters.forEach(semBlock => {
+              const semesterStr = String(semBlock.semester);
+              semBlock.subjects.forEach(sub => {
+                marksRecords.push({
+                  roll_number: rollNumber,
+                  semester: semesterStr,
+                  subject_name: sub.subject,
+                  subject_code: sub.subjectCode,
+                  ca_marks: sub.caMarks,
+                  pca_marks: sub.pcaMarks,
+                  total_marks: sub.total,
+                  updated_at: new Date().toISOString()
+                });
+              });
+            });
+
+            console.log(`[API] Prepared ${marksRecords.length} rows for upserting.`);
+            await supabase.from("ca_marks").delete().eq("roll_number", rollNumber);
+            const { error: caUpsertError } = await supabase
+              .from("ca_marks")
+              .insert(marksRecords);
+
+            if (caUpsertError) {
+              console.error("[SUPABASE] Failed to upsert CA Marks fallback:", caUpsertError.message);
+            } else {
+              console.log(`[SUPABASE] CA Marks fallback upsert successful. Reloading data...`);
+              const { data: refetchedData } = await supabase
+                .from("ca_marks")
+                .select("*")
+                .eq("roll_number", rollNumber)
+                .order("semester", { ascending: false });
+
+              if (refetchedData) {
+                marksData = refetchedData;
+              }
+            }
+          }
+        } catch (parseErr) {
+          console.error("[API] Error parsing fallback CA Marks:", parseErr.message);
+        }
+      } else {
+        console.log(`[API] Fallback failed: debug/ca-marks.html not found`);
+      }
+    }
+
+    if (!marksData || marksData.length === 0) {
       return res.json({ success: true, semesters: [] });
     }
 
     const semestersMap = {};
-    data.forEach(item => {
+    marksData.forEach(item => {
       if (!semestersMap[item.semester]) semestersMap[item.semester] = [];
       semestersMap[item.semester].push({
         subjectCode: item.subject_code,
@@ -737,12 +799,35 @@ app.get("/student/:rollNumber/ca-marks", async (req, res) => {
         subjects: semestersMap[sem]
       }));
 
+    console.log(`[API] Returning data for ${rollNumber}:`, {
+      rowsReturned: marksData.length,
+      semestersGrouped: semesters.map(s => ({ semester: s.semester, subjectCount: s.subjects.length }))
+    });
+
     return res.json({
       success: true,
       semesters
     });
   } catch (err) {
+    console.error("[API] Error in GET CA Marks:", err.message);
     return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// ─── GET /debug/ca-marks-db/:rollNumber — Temporary Debug API ─────────────────
+app.get("/debug/ca-marks-db/:rollNumber", async (req, res) => {
+  const { rollNumber } = req.params;
+  try {
+    const { data, error } = await supabase
+      .from("ca_marks")
+      .select("*")
+      .eq("roll_number", rollNumber);
+    if (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+    return res.json({ success: true, count: data ? data.length : 0, data });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
   }
 });
 

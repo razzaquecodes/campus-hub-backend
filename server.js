@@ -287,6 +287,39 @@ app.post("/verify-student", async (req, res) => {
       }
     }
 
+    // ── NEW STEP 1.9: Fetch Result explicitly ─────────────────────────────
+    let resultCaptured = false;
+    let resultHtmlLength = 0;
+    let resultError = null;
+
+    try {
+      const resultUrl = `${BASE_URL}/student/student-activity`;
+      console.log(`[RESULT] Fetching Results/Activity → GET ${resultUrl}`);
+      const resultRes = await client.get(resultUrl, {
+        headers: { Referer: `${BASE_URL}/student/dashboard` },
+        validateStatus: () => true,
+      });
+
+      const resultHtmlRaw = resultRes.data;
+      const resultHtml = typeof resultHtmlRaw === "string" ? resultHtmlRaw : JSON.stringify(resultHtmlRaw);
+      resultHtmlLength = resultHtml.length;
+
+      console.log(`[RESULT] Results response — status: ${resultRes.status}, body length: ${resultHtmlLength}`);
+
+      const debugDirDashboard = path.join(__dirname, "debug");
+      if (!fs.existsSync(debugDirDashboard)) {
+        fs.mkdirSync(debugDirDashboard, { recursive: true });
+      }
+      const resultFilePath = path.join(debugDirDashboard, "result.html");
+      fs.writeFileSync(resultFilePath, resultHtml, "utf8");
+
+      resultCaptured = true;
+    } catch (resErr) {
+      console.error("[RESULT] Failed to capture Results:", resErr.message);
+      resultCaptured = false;
+      resultError = resErr.message;
+    }
+
     // Merge PCA data into CA data
     if (caMarksData && pcaMarksData) {
       caMarksData.semesters.forEach(sem => {
@@ -499,7 +532,10 @@ app.post("/verify-student", async (req, res) => {
       dashboardError: dashboardCaptured ? undefined : dashboardError,
       caMarksCaptured,
       caMarksHtmlLength: caMarksCaptured ? caMarksHtmlLength : undefined,
-      caMarksError: caMarksCaptured ? undefined : caMarksError
+      caMarksError: caMarksCaptured ? undefined : caMarksError,
+      resultCaptured,
+      resultHtmlLength: resultCaptured ? resultHtmlLength : undefined,
+      resultError: resultCaptured ? undefined : resultError
     });
   } catch (err) {
     console.error("[MAKAUT] Unexpected error:", err.message);
@@ -805,6 +841,21 @@ app.get("/debug/ca-marks", (req, res) => {
   } catch (err) {
     return res.status(500).json({ success: false, error: "Parsing failed", details: err.message });
   }
+});
+
+// ─── GET /debug/result — serve captured Result HTML ──────────────────────────
+app.get("/debug/result", (req, res) => {
+  const debugFilePath = path.join(__dirname, "debug", "result.html");
+  if (!fs.existsSync(debugFilePath)) {
+    return res
+      .status(404)
+      .json({ error: "No saved result.html found. Call /verify-student first." });
+  }
+  const html = fs.readFileSync(debugFilePath, "utf8");
+  
+  // Return raw HTML since parsing is not yet implemented
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.send(html);
 });
 
 // ─── GET /debug/discovered-endpoints ──────────────────────────────────────────

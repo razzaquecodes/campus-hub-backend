@@ -242,6 +242,92 @@ app.post("/verify-student", async (req, res) => {
       }
     }
 
+    // ── NEW STEP 1.7: Fetch PCA Marks explicitly ─────────────────────────────
+    let pcaMarksCaptured = false;
+    let pcaMarksHtmlLength = 0;
+    let pcaMarksError = null;
+
+    try {
+      const pcaMarksUrl = `${BASE_URL}/student/student-practical-assessment`;
+      console.log(`[MAKAUT] Fetching PCA Marks → GET ${pcaMarksUrl}`);
+      const pcaMarksRes = await client.get(pcaMarksUrl, {
+        headers: { Referer: `${BASE_URL}/student/dashboard` },
+        validateStatus: () => true,
+      });
+
+      const pcaMarksHtmlRaw = pcaMarksRes.data;
+      const pcaMarksHtml = typeof pcaMarksHtmlRaw === "string" ? pcaMarksHtmlRaw : JSON.stringify(pcaMarksHtmlRaw);
+      pcaMarksHtmlLength = pcaMarksHtml.length;
+
+      console.log(`[MAKAUT] PCA Marks response — status: ${pcaMarksRes.status}, body length: ${pcaMarksHtmlLength}`);
+
+      const debugDirDashboard = path.join(__dirname, "debug");
+      if (!fs.existsSync(debugDirDashboard)) {
+        fs.mkdirSync(debugDirDashboard, { recursive: true });
+      }
+      const pcaMarksFilePath = path.join(debugDirDashboard, "pca-marks.html");
+      fs.writeFileSync(pcaMarksFilePath, pcaMarksHtml, "utf8");
+
+      pcaMarksCaptured = true;
+    } catch (pcaErr) {
+      console.error("[MAKAUT] Failed to capture PCA Marks:", pcaErr.message);
+      pcaMarksCaptured = false;
+      pcaMarksError = pcaErr.message;
+    }
+
+    // ── NEW STEP 1.8: Parse PCA Marks & Merge ────────────────────────────────
+    let pcaMarksData = null;
+    if (pcaMarksCaptured) {
+      try {
+        const pcaHtml = fs.readFileSync(path.join(__dirname, "debug", "pca-marks.html"), "utf8");
+        pcaMarksData = extractPcaMarks(pcaHtml);
+        console.log(`[MAKAUT] Parsed PCA Marks: ${pcaMarksData.semesters.length} semesters found.`);
+      } catch (parseErr) {
+        console.error("[MAKAUT] Failed to parse PCA Marks:", parseErr.message);
+      }
+    }
+
+    // Merge PCA data into CA data
+    if (caMarksData && pcaMarksData) {
+      caMarksData.semesters.forEach(sem => {
+        const pcaSem = pcaMarksData.semesters.find(s => s.semester === sem.semester);
+        if (pcaSem) {
+          sem.subjects.forEach(sub => {
+            const pcaSub = pcaSem.subjects.find(ps => ps.subject.toLowerCase() === sub.subject.toLowerCase());
+            if (pcaSub) {
+              console.log(`[MERGE] Semester ${sem.semester} | Match found for ${sub.subject}`);
+              sub.pa1 = pcaSub.pa1;
+              sub.pa2 = pcaSub.pa2;
+              if (!sub.teacher && pcaSub.teacher) {
+                sub.teacher = pcaSub.teacher;
+              }
+            }
+          });
+        }
+      });
+      // Also add any semester/subjects that only exist in PCA (rare but possible)
+      pcaMarksData.semesters.forEach(pcaSem => {
+        let sem = caMarksData.semesters.find(s => s.semester === pcaSem.semester);
+        if (!sem) {
+          sem = { semester: pcaSem.semester, subjects: [] };
+          caMarksData.semesters.push(sem);
+        }
+        pcaSem.subjects.forEach(pcaSub => {
+          const sub = sem.subjects.find(s => s.subject.toLowerCase() === pcaSub.subject.toLowerCase());
+          if (!sub) {
+            console.log(`[MERGE] Semester ${pcaSem.semester} | Adding PA-only subject ${pcaSub.subject}`);
+            sem.subjects.push({
+              subject: pcaSub.subject,
+              subjectCode: pcaSub.subjectCode,
+              teacher: pcaSub.teacher,
+              ca1: null, ca2: null, ca3: null, ca4: null,
+              pa1: pcaSub.pa1, pa2: pcaSub.pa2
+            });
+          }
+        });
+      });
+    }
+
     // ── Step 5: Fetch student basic details page ───────────────────────────────
     const studentDetailsUrl = `${BASE_URL}/student/student-basic-details`;
     console.log(`[MAKAUT] Fetching student details → GET ${studentDetailsUrl}`);
@@ -373,9 +459,16 @@ app.post("/verify-student", async (req, res) => {
             semester: semesterStr,
             subject_name: sub.subject,
             subject_code: sub.subjectCode,
-            ca_marks: sub.caMarks,
-            pca_marks: sub.pcaMarks,
-            total_marks: sub.total,
+            teacher: sub.teacher || null,
+            ca1: sub.ca1 !== undefined ? sub.ca1 : null,
+            ca2: sub.ca2 !== undefined ? sub.ca2 : null,
+            ca3: sub.ca3 !== undefined ? sub.ca3 : null,
+            ca4: sub.ca4 !== undefined ? sub.ca4 : null,
+            pca1: sub.pa1 !== undefined ? sub.pa1 : null,
+            pca2: sub.pa2 !== undefined ? sub.pa2 : null,
+            ca_marks: null,
+            pca_marks: null,
+            total_marks: null,
             updated_at: new Date().toISOString()
           });
         });
@@ -556,20 +649,22 @@ function extractCaMarks(html) {
       const ca2 = parseMark($(cells[3]).text());
       const ca3 = parseMark($(cells[4]).text());
       const ca4 = parseMark($(cells[5]).text());
+      const teacher = $(cells[6]).text().trim() || "";
 
-      const caMarksList = [ca1, ca2, ca3, ca4].filter(m => m !== null && !isNaN(m));
-      const caMarksMax = caMarksList.length > 0 ? Math.max(...caMarksList) : null;
-      
+      console.log(`[PARSER] Semester ${currentSemesterNum} | Subject ${subjectCode} | CA1: ${ca1} | CA2: ${ca2} | CA3: ${ca3} | CA4: ${ca4}`);
+
       const pcaMarks = null; // PCA marks not present on this page
-      let total = Number(caMarksMax || 0) + Number(pcaMarks || 0);
 
       if (subjectName) {
         semestersData[currentSemesterNum].push({
           subject: subjectName,
           subjectCode: subjectCode,
-          caMarks: caMarksMax,
+          teacher: teacher,
+          ca1: ca1,
+          ca2: ca2,
+          ca3: ca3,
+          ca4: ca4,
           pcaMarks: pcaMarks,
-          total: total,
           semester: currentSemesterNum
         });
       }
@@ -587,6 +682,82 @@ function extractCaMarks(html) {
   return {
     semesters
   };
+}
+
+// ─── extractPcaMarks ─────────────────────────────────────────────────────────
+function extractPcaMarks(html) {
+  const $ = cheerio.load(html);
+
+  const semestersData = {};
+  let currentSemesterStr = "";
+  let currentSemesterNum = null;
+
+  const parseSemester = (text) => {
+    const lower = text.toLowerCase();
+    if (lower.includes("first")) return 1;
+    if (lower.includes("second")) return 2;
+    if (lower.includes("third")) return 3;
+    if (lower.includes("fourth")) return 4;
+    if (lower.includes("fifth")) return 5;
+    if (lower.includes("sixth")) return 6;
+    if (lower.includes("seventh")) return 7;
+    if (lower.includes("eighth")) return 8;
+    return parseInt(text.replace(/\D/g, ""), 10) || null;
+  };
+
+  $("table tr").each((_, row) => {
+    const text = $(row).text().trim();
+    if (text.toLowerCase().includes("semester") && $(row).find("td").length === 1) {
+      currentSemesterStr = text;
+      currentSemesterNum = parseSemester(text);
+      if (currentSemesterNum && !semestersData[currentSemesterNum]) {
+        semestersData[currentSemesterNum] = [];
+      }
+      return;
+    }
+
+    const cells = $(row).find("td");
+    if (cells.length >= 4 && currentSemesterNum) {
+      const headerText = $(cells[0]).text().toLowerCase();
+      if (headerText.includes("paper code") || headerText.includes("unique")) return;
+
+      const fullCode = $(cells[0]).text().trim();
+      const subjectCode = fullCode.split("(")[0].trim();
+      const subjectName = $(cells[1]).text().trim();
+      
+      const parseMark = (val) => {
+        const v = val.trim();
+        return v === "" ? null : parseInt(v, 10);
+      };
+
+      const pa1 = parseMark($(cells[2]).text());
+      const pa2 = parseMark($(cells[3]).text());
+      const teacher = cells.length > 4 ? $(cells[4]).text().trim() : "";
+
+      console.log(`[PARSER] Semester ${currentSemesterNum} | PA Subject ${subjectCode} | PA1: ${pa1} | PA2: ${pa2}`);
+
+      if (subjectName) {
+        semestersData[currentSemesterNum].push({
+          subject: subjectName,
+          subjectCode: subjectCode,
+          teacher: teacher,
+          pa1: pa1,
+          pa2: pa2,
+          semester: currentSemesterNum
+        });
+      }
+    }
+  });
+
+  const semesters = Object.keys(semestersData)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .map(sem => ({
+      semester: sem,
+      subjects: semestersData[sem]
+    }));
+
+  return { semesters };
 }
 
 // ─── GET /debug/student-html — serve saved HTML for browser inspection ────────
@@ -739,9 +910,13 @@ app.get("/student/:rollNumber/ca-marks", async (req, res) => {
                   semester: semesterStr,
                   subject_name: sub.subject,
                   subject_code: sub.subjectCode,
-                  ca_marks: sub.caMarks,
-                  pca_marks: sub.pcaMarks,
-                  total_marks: sub.total,
+                  teacher: sub.teacher || null,
+                  ca1: sub.ca1 !== undefined ? sub.ca1 : null,
+                  ca2: sub.ca2 !== undefined ? sub.ca2 : null,
+                  ca3: sub.ca3 !== undefined ? sub.ca3 : null,
+                  ca4: sub.ca4 !== undefined ? sub.ca4 : null,
+                  pca1: sub.pa1 !== undefined ? sub.pa1 : null,
+                  pca2: sub.pa2 !== undefined ? sub.pa2 : null,
                   updated_at: new Date().toISOString()
                 });
               });
@@ -786,9 +961,13 @@ app.get("/student/:rollNumber/ca-marks", async (req, res) => {
       semestersMap[item.semester].push({
         subjectCode: item.subject_code,
         subjectName: item.subject_name,
-        caMarks: item.ca_marks,
-        pcaMarks: item.pca_marks,
-        totalMarks: item.total_marks
+        teacher: item.teacher || "",
+        ca1: item.ca1,
+        ca2: item.ca2,
+        ca3: item.ca3,
+        ca4: item.ca4,
+        pa1: item.pca1,
+        pa2: item.pca2
       });
     });
 
@@ -828,6 +1007,103 @@ app.get("/debug/ca-marks-db/:rollNumber", async (req, res) => {
     return res.json({ success: true, count: data ? data.length : 0, data });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ─── GET /student/:rollNumber/internal-marks — Production API ─────────────────
+app.get("/student/:rollNumber/internal-marks", async (req, res) => {
+  const { rollNumber } = req.params;
+  console.log(`[API] GET /student/${rollNumber}/internal-marks requested`);
+
+  try {
+    const { data, error } = await supabase
+      .from("ca_marks")
+      .select("*")
+      .eq("roll_number", rollNumber)
+      .order("semester", { ascending: false });
+
+    console.log(`[SUPABASE] Query internal marks for ${rollNumber}: error=${error ? error.message : "null"}, rows_found=${data ? data.length : 0}`);
+
+    if (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+
+    if (!data || data.length === 0) {
+      return res.json({ success: true, semesters: [] });
+    }
+
+    const semestersMap = {};
+    data.forEach(item => {
+      if (!semestersMap[item.semester]) semestersMap[item.semester] = [];
+      semestersMap[item.semester].push({
+        subjectCode: item.subject_code || "",
+        subjectName: item.subject_name || "",
+        teacher: item.teacher || "",
+        ca1: item.ca1 !== null ? item.ca1 : null,
+        ca2: item.ca2 !== null ? item.ca2 : null,
+        ca3: item.ca3 !== null ? item.ca3 : null,
+        ca4: item.ca4 !== null ? item.ca4 : null,
+        pa1: item.pca1 !== null ? item.pca1 : null,
+        pa2: item.pca2 !== null ? item.pca2 : null
+      });
+    });
+
+    const semesters = Object.keys(semestersMap)
+      .sort((a, b) => Number(b) - Number(a)) // sort descending
+      .map(sem => ({
+        semester: Number(sem),
+        subjects: semestersMap[sem]
+      }));
+
+    console.log(`[API] Returning internal marks for ${rollNumber}:`, {
+      rowsReturned: data.length,
+      semestersGrouped: semesters.map(s => ({ semester: s.semester, subjectCount: s.subjects.length }))
+    });
+
+    return res.json({
+      success: true,
+      semesters
+    });
+  } catch (err) {
+    console.error("[API] Error in GET internal marks:", err.message);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// ─── GET /verify/:studentId — Verification API ────────────────────────────────
+app.get("/verify/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+  console.log(`[API] GET /verify/${studentId} requested`);
+
+  try {
+    const { data, error } = await supabase
+      .from("students")
+      .select("*")
+      .eq("roll_number", studentId)
+      .single();
+
+    if (error || !data) {
+      console.log(`[API] Verification failed for ${studentId}: not found`);
+      return res.json({ verified: false, message: "Student not found" });
+    }
+
+    return res.json({
+      verified: true,
+      student: {
+        rollNumber: data.roll_number,
+        registrationNumber: data.registration_number,
+        fullName: data.full_name,
+        email: data.email,
+        mobile: data.mobile,
+        instituteName: data.institute_name,
+        courseName: data.course_name,
+        abcId: data.abc_id,
+        profilePhotoUrl: data.profile_photo_url
+      }
+    });
+  } catch (err) {
+    console.error("[API] Error in verify endpoint:", err.message);
+    return res.status(500).json({ verified: false, message: "Internal server error" });
   }
 });
 

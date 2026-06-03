@@ -1,0 +1,55 @@
+{
+  "semester": "2",
+  "sgpa": null,
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "BSCH201",
+      "subjectName": "Chemistry-I (Gr-A)",
+      "grade": "F",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSM201",
+      "subjectName": "Mathematics - IIA",
+      "grade": "D",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "ESCS201",
+      "subjectName": "Programming for Problem Solving",
+      "grade": "F",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "HMHU201",
+      "subjectName": "English",
+      "grade": "C",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "BSCH291",
+      "subjectName": "Chemistry-I Laboratory (Gr-A)",
+      "grade": "A",
+      "credits": "1.5"
+    },
+    {
+      "subjectCode": "ESCS291",
+      "subjectName": "Programming for Problem Solving",
+      "grade": "O",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "ESME291",
+      "subjectName": "Engineering Graphics & Design(Gr-A)",
+      "grade": "A",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "HMHU291",
+      "subjectName": "Language Laboratory",
+      "grade": "O",
+      "credits": "1.0"
+    }
+  ]
+}

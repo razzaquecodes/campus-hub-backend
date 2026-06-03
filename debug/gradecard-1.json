@@ -1,0 +1,43 @@
+{
+  "semester": "1",
+  "sgpa": "6.14",
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "BSPH101",
+      "subjectName": "Physics I (Gr A)",
+      "grade": "C",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSM101",
+      "subjectName": "Mathematics I A",
+      "grade": "C",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "ESEE101",
+      "subjectName": "Basic Electrical Engineering",
+      "grade": "D",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSPH191",
+      "subjectName": "Physics I Laboratory (Gr A)",
+      "grade": "D",
+      "credits": "1.5"
+    },
+    {
+      "subjectCode": "ESEE191",
+      "subjectName": "Basic Electrical Engineering Laboratory",
+      "grade": "A",
+      "credits": "1.0"
+    },
+    {
+      "subjectCode": "ESME192",
+      "subjectName": "Workshop/Manufacturing Practices(Gr A)",
+      "grade": "A",
+      "credits": "3.0"
+    }
+  ]
+}

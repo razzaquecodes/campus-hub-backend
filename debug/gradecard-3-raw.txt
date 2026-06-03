@@ -1,0 +1,74 @@
+MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+SECOND YEAR FIRST SEMESTER EXAMINATION OF 2025-26
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+ESC301 Analog and Digital Electronics F 2 3.0 6
+PCC-CS301 Data Structure & Algorithms D 5 3.0 15
+PCC-CS302 Computer Organisation F 2 3.0 6
+BSC301 Mathematics-III (Differential Calculus) F 2 2.0 4
+HSMC301 Economics for Engineers (Humanities-II) B 7 3.0 21
+PCC-CS393 IT Workshop (Sci Lab/MATLAB/Python/R) E 9 2.0 18
+ES-CS391 Analog and Digital Electronics Lab A 8 2.0 16
+PCC-CS391 Data Structure & Algorithms Lab E 9 2.0 18
+PCC-CS392 Computer Organisation Lab E 9 2.0 18
+Total 22 122
+SGPA ODD. (3rd) SEMESTER : -
+RESULT ODD. (3rd) SEMESTER : XP
+YGPA
+Please report of any discrepancy through college within 7 days,
+Otherwise, University will not responsible for any errors in transcripts (if any)
+.
+Kolkata
+18-04-2026
+R
+Printed On: 03-06-2026 00:18:37
+
+-- 1 of 2 --
+
+1. The table below shows the Letter Grades and their corresponding classification and percentage points
+Classification Letter Grade Score on 100 Percentage
+Points Points
+Outstanding O 100 to 90 10
+Excellent E 89 to 80 9
+Very Good A 79 to 70 8
+Good B 69 to 60 7
+Fair C 59 to 50 6
+Below Average D 49 to 40 5
+Failed F Below 40 2
+Incomplete I --- 2
+2. No Class / Percentage is awarded
+3. Result Status: X=Not eligible for Semester Promotion/Degree; XP=Eligible for Promotion with Backlogs; P=Passed and Promoted
+4.The method of calculation of Grade Point Average is as follows
+SGPA
+(Semester Grade Point Average) = Credit Index
+Credits
+YGPA
+(Yearly Grade Point Average) = Credit Index Odd Semester + Credit Index Even Semester
+Credits Odd Semester + Credits Even Semester
+5. For final Degree Grade Point Average (DGPA) the calculation is as under
+DGPA
+(For 4 Year Degree Course) = YGPA 1 + YGPA2 + 1.5* YGPA3 + 1.5* YGPA4
+5
+DGPA
+(For Lateral Entry Students) = YGPA2 + 1.5* YGPA3 + 1.5* YGPA4
+4
+DGPA
+(For 3 Year Degree Course) = YGPA 1 + YGPA2 + YGPA3
+3
+DGPA
+(For 2 Year Degree Course) = YGPA 1 + YGPA2
+2
+DGPA
+(For 1 Year Degree Course) = YGPA 1
+6. CUMULATIVE GRADE POINT AVERAGE (CGPA)
+Printed On: 03-06-2026 00:18:37
+
+-- 2 of 2 --
+

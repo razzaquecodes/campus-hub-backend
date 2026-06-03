@@ -1,0 +1,61 @@
+{
+  "semester": "1",
+  "sgpa": null,
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "ESC301",
+      "subjectName": "Analog and Digital Electronics",
+      "grade": "F",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "PCC-CS301",
+      "subjectName": "Data Structure & Algorithms",
+      "grade": "D",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "PCC-CS302",
+      "subjectName": "Computer Organisation",
+      "grade": "F",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "BSC301",
+      "subjectName": "Mathematics-III (Differential Calculus)",
+      "grade": "F",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "HSMC301",
+      "subjectName": "Economics for Engineers (Humanities-II)",
+      "grade": "B",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "PCC-CS393",
+      "subjectName": "IT Workshop (Sci Lab/MATLAB/Python/R)",
+      "grade": "E",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "ES-CS391",
+      "subjectName": "Analog and Digital Electronics Lab",
+      "grade": "A",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "PCC-CS391",
+      "subjectName": "Data Structure & Algorithms Lab",
+      "grade": "E",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "PCC-CS392",
+      "subjectName": "Computer Organisation Lab",
+      "grade": "E",
+      "credits": "2.0"
+    }
+  ]
+}

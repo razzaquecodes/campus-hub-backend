@@ -1,0 +1,228 @@
+{
+  "gradecardsFound": 4,
+  "downloaded": 4,
+  "parsed": 4,
+  "failed": 0,
+  "finalResults": [
+    {
+      "semester": "1",
+      "sgpa": "6.14",
+      "cgpa": null,
+      "subjects": [
+        {
+          "subjectCode": "BSPH101",
+          "subjectName": "Physics I (Gr A)",
+          "grade": "C",
+          "credits": "4.0"
+        },
+        {
+          "subjectCode": "BSM101",
+          "subjectName": "Mathematics I A",
+          "grade": "C",
+          "credits": "4.0"
+        },
+        {
+          "subjectCode": "ESEE101",
+          "subjectName": "Basic Electrical Engineering",
+          "grade": "D",
+          "credits": "4.0"
+        },
+        {
+          "subjectCode": "BSPH191",
+          "subjectName": "Physics I Laboratory (Gr A)",
+          "grade": "D",
+          "credits": "1.5"
+        },
+        {
+          "subjectCode": "ESEE191",
+          "subjectName": "Basic Electrical Engineering Laboratory",
+          "grade": "A",
+          "credits": "1.0"
+        },
+        {
+          "subjectCode": "ESME192",
+          "subjectName": "Workshop/Manufacturing Practices(Gr A)",
+          "grade": "A",
+          "credits": "3.0"
+        }
+      ]
+    },
+    {
+      "semester": "2",
+      "sgpa": null,
+      "cgpa": null,
+      "subjects": [
+        {
+          "subjectCode": "BSCH201",
+          "subjectName": "Chemistry-I (Gr-A)",
+          "grade": "F",
+          "credits": "4.0"
+        },
+        {
+          "subjectCode": "BSM201",
+          "subjectName": "Mathematics - IIA",
+          "grade": "D",
+          "credits": "4.0"
+        },
+        {
+          "subjectCode": "ESCS201",
+          "subjectName": "Programming for Problem Solving",
+          "grade": "F",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "HMHU201",
+          "subjectName": "English",
+          "grade": "C",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "BSCH291",
+          "subjectName": "Chemistry-I Laboratory (Gr-A)",
+          "grade": "A",
+          "credits": "1.5"
+        },
+        {
+          "subjectCode": "ESCS291",
+          "subjectName": "Programming for Problem Solving",
+          "grade": "O",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "ESME291",
+          "subjectName": "Engineering Graphics & Design(Gr-A)",
+          "grade": "A",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "HMHU291",
+          "subjectName": "Language Laboratory",
+          "grade": "O",
+          "credits": "1.0"
+        }
+      ]
+    },
+    {
+      "semester": "1",
+      "sgpa": null,
+      "cgpa": null,
+      "subjects": [
+        {
+          "subjectCode": "ESC301",
+          "subjectName": "Analog and Digital Electronics",
+          "grade": "F",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "PCC-CS301",
+          "subjectName": "Data Structure & Algorithms",
+          "grade": "D",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "PCC-CS302",
+          "subjectName": "Computer Organisation",
+          "grade": "F",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "BSC301",
+          "subjectName": "Mathematics-III (Differential Calculus)",
+          "grade": "F",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "HSMC301",
+          "subjectName": "Economics for Engineers (Humanities-II)",
+          "grade": "B",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "PCC-CS393",
+          "subjectName": "IT Workshop (Sci Lab/MATLAB/Python/R)",
+          "grade": "E",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "ES-CS391",
+          "subjectName": "Analog and Digital Electronics Lab",
+          "grade": "A",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "PCC-CS391",
+          "subjectName": "Data Structure & Algorithms Lab",
+          "grade": "E",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "PCC-CS392",
+          "subjectName": "Computer Organisation Lab",
+          "grade": "E",
+          "credits": "2.0"
+        }
+      ]
+    },
+    {
+      "semester": "1",
+      "sgpa": null,
+      "cgpa": null,
+      "subjects": [
+        {
+          "subjectCode": "ESC301",
+          "subjectName": "Analog and Digital Electronics",
+          "grade": "F",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "PCC-CS301",
+          "subjectName": "Data Structure & Algorithms",
+          "grade": "D",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "PCC-CS302",
+          "subjectName": "Computer Organisation",
+          "grade": "F",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "BSC301",
+          "subjectName": "Mathematics-III (Differential Calculus)",
+          "grade": "F",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "HSMC301",
+          "subjectName": "Economics for Engineers (Humanities-II)",
+          "grade": "B",
+          "credits": "3.0"
+        },
+        {
+          "subjectCode": "PCC-CS393",
+          "subjectName": "IT Workshop (Sci Lab/MATLAB/Python/R)",
+          "grade": "E",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "ES-CS391",
+          "subjectName": "Analog and Digital Electronics Lab",
+          "grade": "A",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "PCC-CS391",
+          "subjectName": "Data Structure & Algorithms Lab",
+          "grade": "E",
+          "credits": "2.0"
+        },
+        {
+          "subjectCode": "PCC-CS392",
+          "subjectName": "Computer Organisation Lab",
+          "grade": "E",
+          "credits": "2.0"
+        }
+      ]
+    }
+  ]
+}

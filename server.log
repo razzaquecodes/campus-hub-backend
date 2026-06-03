@@ -1,0 +1,897 @@
+
+> campus-hub-backend@1.0.0 start
+> node server.js
+
+◇ injected env (3) from .env // tip: ⌘ override existing { override: true }
+SUPABASE_URL: https://czfylavvvwwohqkrhbdb.supabase.co
+SERVICE_ROLE_PRESENT: true
+Server running on port 3000
+[SUPABASE TEST] {
+  "success": true,
+  "error": null,
+  "data": [
+    {
+      "id": "9b5c0122-3b27-4544-9016-332f9bf801b9",
+      "roll_number": "27600124001",
+      "registration_number": "242760110064( 2024-25 )",
+      "full_name": "ABDUR RAZZAQUE",
+      "institute_name": "BUDGE BUDGE INSTITUTE OF TECHNOLOGY(276)",
+      "course_name": "Bachelor of Technology in Computer Science & Engineering(001)",
+      "email": "razzaqueabdur165@gmail.com",
+      "mobile": "6207506369",
+      "abc_id": "476183106112",
+      "verified": true,
+      "created_at": "2026-06-01T08:14:10.692993+00:00",
+      "profile_photo_url": "https://czfylavvvwwohqkrhbdb.supabase.co/storage/v1/object/public/student-profiles/27600124001.jpg"
+    }
+  ],
+  "count": null,
+  "status": 200,
+  "statusText": "OK"
+}
+[MAKAUT] Fetching homepage to obtain CSRF token …
+[MAKAUT] Homepage fetched — status: 200, body length: 12893
+[MAKAUT] CSRF token extracted: RvoC5KwjjzkLMNSFGy1Q…
+[MAKAUT] Attempting login for roll number: 27600124001 → POST https://makaut1.ucanapply.com/smartexam/public/checkLogin
+[MAKAUT] Login response — status: 200, final URL: https://makaut1.ucanapply.com/smartexam/public/checkLogin, body length: undefined
+[MAKAUT] Login SUCCEEDED — session cookies preserved
+[MAKAUT] Fetching Dashboard → GET https://makaut1.ucanapply.com/smartexam/public/student/dashboard
+[MAKAUT] Dashboard response — status: 200, URL: https://makaut1.ucanapply.com/smartexam/public/student/dashboard, body length: 15279
+[MAKAUT] Fetching CA Marks → GET https://makaut1.ucanapply.com/smartexam/public/student/student-marks-display
+[MAKAUT] CA Marks response — status: 200, body length: 14891
+[PARSER] Semester 3 | Subject ESC301 | CA1: 15 | CA2: 21 | CA3: null | CA4: 20
+[PARSER] Semester 3 | Subject PCC-CS301 | CA1: 20 | CA2: 21 | CA3: null | CA4: 20
+[PARSER] Semester 3 | Subject PCC-CS302 | CA1: 12 | CA2: 18 | CA3: null | CA4: 18
+[PARSER] Semester 3 | Subject BSC301 | CA1: 20 | CA2: 23 | CA3: null | CA4: 18
+[PARSER] Semester 3 | Subject HSMC301 | CA1: 20 | CA2: 23 | CA3: null | CA4: 12
+[PARSER] Semester 4 | Subject PCC-CS401 | CA1: null | CA2: 25 | CA3: 20 | CA4: null
+[PARSER] Semester 4 | Subject PCC-CS402 | CA1: null | CA2: 23 | CA3: 14 | CA4: null
+[PARSER] Semester 4 | Subject PCC-CS403 | CA1: null | CA2: 23 | CA3: 7 | CA4: null
+[PARSER] Semester 4 | Subject PCC-CS404 | CA1: null | CA2: 23 | CA3: 10 | CA4: null
+[PARSER] Semester 4 | Subject BSC 401 | CA1: null | CA2: 25 | CA3: 15 | CA4: null
+[PARSER] Semester 4 | Subject MC401 | CA1: null | CA2: 25 | CA3: 20 | CA4: null
+[MAKAUT] Parsed CA Marks: 2 semesters found.
+[MAKAUT] Fetching PCA Marks → GET https://makaut1.ucanapply.com/smartexam/public/student/student-practical-assessment
+[MAKAUT] PCA Marks response — status: 200, body length: 11150
+[PARSER] Semester 3 | PA Subject PCC-CS393 | PA1: 33 | PA2: 35
+[PARSER] Semester 3 | PA Subject ES-CS391 | PA1: 35 | PA2: 28
+[PARSER] Semester 3 | PA Subject PCC-CS391 | PA1: 31 | PA2: 30
+[PARSER] Semester 3 | PA Subject PCC-CS392 | PA1: 30 | PA2: 34
+[PARSER] Semester 4 | PA Subject PCC-CS 492 | PA1: 37 | PA2: null
+[PARSER] Semester 4 | PA Subject PCC-CS494 | PA1: 38 | PA2: null
+[MAKAUT] Parsed PCA Marks: 2 semesters found.
+[RESULT] Fetching Results/Activity → GET https://makaut1.ucanapply.com/smartexam/public/student/student-activity
+[RESULT] Results response — status: 200, body length: 12779
+[RESULT] Grade Card Links Found: 5
+[GRADE CARD URL] https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IjlxUUlLVyt4RU9xNU9HT3FHZThQSFE9PSIsInZhbHVlIjoiNmhjV3p1UmxBTVNKV2VoR2lXTExWQT09IiwibWFjIjoiMWVmNTExZTkzYjlmYjMxOTJjMzQ5OGI1Y2VlMzEwY2FlNTBlNDU5NjBmMjZiZWNmODYyOGQwMzI0Y2Q5ZTY4OCJ9/1
+[GRADE CARD INPUTS] {
+  "_token": "iaUd2p2puJU6ORN6rpV7y5ixZ7e1nlXnLgkTD8Ey",
+  "rollno": "27600124001",
+  "provisional": "N"
+}
+[COOKIES BEFORE GRADE CARD] XSRF-TOKEN=eyJpdiI6IkVkSUVhdEQxYkhRNHp1WkhFMGVsbVE9PSIsInZhbHVlIjoia0N5VXIwWThYZlJwVkhBSzJ5NVNQaWVwVmhjNDdCTW56ZDh2KzhlTTBMRUZoQTZmWEEySFwvVmpKYUhPSUg3YlIiLCJtYWMiOiJjZmExNmJiMjI1YjU4ZDY0MzUyZmJjYzI3MzY5MGMwYjcwMjg0MTAzMzRjZDY3MjU1YTg3YzgwYzRiNDJmNmQ2In0%3D; maulana_abul_kalam_azad_university_of_technology_session=eyJpdiI6IjlcL3lJVnlpMjVWWWVxV3BYcWk5QnV3PT0iLCJ2YWx1ZSI6InJncmpDOVdkc0FyRDVnSU9mNURRT05rK1NwenFRYXhJUEFkUG1yZzFEVVo3UlFNbThoYTkyd3IrMUJUQ1FaZHciLCJtYWMiOiI0MGM5Y2YyNWYxODc0YzUxOGYzNTIyY2NiYmM5NGE3ZGEwODRkNTM2NDNhNmE1Y2Y0ZjZmODdhZDI2NDg4NDAwIn0%3D; PHPSESSID=g6beef5qfmbdic1r6i5psa9cq2
+[GRADE CARD] Fetching Grade Card 1 -> POST https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IjlxUUlLVyt4RU9xNU9HT3FHZThQSFE9PSIsInZhbHVlIjoiNmhjV3p1UmxBTVNKV2VoR2lXTExWQT09IiwibWFjIjoiMWVmNTExZTkzYjlmYjMxOTJjMzQ5OGI1Y2VlMzEwY2FlNTBlNDU5NjBmMjZiZWNmODYyOGQwMzI0Y2Q5ZTY4OCJ9/1
+[GRADE CARD] Response 1 — status: 200, URL: https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IjlxUUlLVyt4RU9xNU9HT3FHZThQSFE9PSIsInZhbHVlIjoiNmhjV3p1UmxBTVNKV2VoR2lXTExWQT09IiwibWFjIjoiMWVmNTExZTkzYjlmYjMxOTJjMzQ5OGI1Y2VlMzEwY2FlNTBlNDU5NjBmMjZiZWNmODYyOGQwMzI0Y2Q5ZTY4OCJ9/1
+[GRADE CARD] Info: Type=application/pdf, LengthHeader=unknown, ActualSize=64449 bytes
+[PDF DOWNLOADED] -> /Users/razzaque/campus-hub-backend/debug/gradecard-1.pdf
+[PDF TEXT LENGTH] 2280
+[PDF PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+FIRST YEAR FIRST SEMESTER EXAMINATION OF 2024-25
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+BSPH101 Physics I (Gr 
+[PDF RAW LENGTH] 2280
+[PARSER INPUT PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+FIRST YEAR FIRST SEMESTER EXAMINATION OF 2024-25
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+BSPH101 Physics I (Gr A) F 2 4.0 8
+BSM101 Mathematics I A F 2 4.0 8
+ESEE101 Basic Electrical Engineering D 5 4.0 20
+BSPH191 Physics I Laboratory (Gr A) D 5 1.5 7.5
+ESEE191 Basic Electrical Engineering Laboratory A 8 1.0 8
+ESME192 Workshop/Manufacturing Practices(Gr A) A 8 3.0 24
+Total 17.5 75.5
+SGPA ODD. (1st) SEMESTER : -
+RESULT ODD. (1st) SEMESTER : XP
+Please report of any discrepancy through college within 7 days,
+Otherwise, University will not responsible for any errors in transcripts (if any)
+.
+Kolkata
+10-02-202
+[EXAM TITLE] FIRST YEAR FIRST SEMESTER
+[YEAR DETECTED] FIRST
+[SEMESTER DETECTED] FIRST
+[FINAL SEMESTER NUMBER] 1
+[PARSED PDF OBJECT] {
+  "semester": "1",
+  "sgpa": null,
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "BSPH101",
+      "subjectName": "Physics I (Gr A)",
+      "grade": "F",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSM101",
+      "subjectName": "Mathematics I A",
+      "grade": "F",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "ESEE101",
+      "subjectName": "Basic Electrical Engineering",
+      "grade": "D",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSPH191",
+      "subjectName": "Physics I Laboratory (Gr A)",
+      "grade": "D",
+      "credits": "1.5"
+    },
+    {
+      "subjectCode": "ESEE191",
+      "subjectName": "Basic Electrical Engineering Laboratory",
+      "grade": "A",
+      "credits": "1.0"
+    },
+    {
+      "subjectCode": "ESME192",
+      "subjectName": "Workshop/Manufacturing Practices(Gr A)",
+      "grade": "A",
+      "credits": "3.0"
+    }
+  ]
+}
+[SEMESTER FOUND] 1
+[SUBJECTS FOUND] 6
+[SGPA] null
+[CGPA] null
+[PUSH SUCCESS]
+[CURRENT RESULT COUNT] 1
+[GRADE CARD URL] https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IkVvS1NzTmxlU0VlRUdhWXAyNytsYkE9PSIsInZhbHVlIjoic1hOU1hRaWNNdnpIeGFIU2JIYVc4Zz09IiwibWFjIjoiMWE1NGJmYWMzMzkyMmQwMDYwNDA1ZmNkODQ2MzdiNzAwNzlhNjM4MzIwMmIwY2I4YzY0ZWQwNTllYjNkY2QyMiJ9/1
+[GRADE CARD INPUTS] {
+  "_token": "iaUd2p2puJU6ORN6rpV7y5ixZ7e1nlXnLgkTD8Ey",
+  "rollno": "27600124001",
+  "provisional": "N"
+}
+[COOKIES BEFORE GRADE CARD] XSRF-TOKEN=eyJpdiI6IlIxbFNiUGRSU2FcL1U0SE4zSHpTMmRBPT0iLCJ2YWx1ZSI6IkZvcGdBV3BkZkRcL1dKeEdVRHcrSVF0bUN0ZXZpWmVtOHZPZEJ1dFdnMkJxblJMUitQNFhZYzBoeWk4OEVLMXJTIiwibWFjIjoiMjQwMzdiZmZiM2NhNGU2MTViM2UzN2IxMTYyMzdkYTk4YjFjNTE4NzIzY2YwYWE5NTNiNmIzYzhkZGZkODdmYiJ9; maulana_abul_kalam_azad_university_of_technology_session=eyJpdiI6Ilp3eU94czNyMmlYSEU3V1wvYm1LRjlRPT0iLCJ2YWx1ZSI6Ilk4Q1FIcURFZGFRUnJIR0VGVm12cUVQYjhJclQ2eDNFYU1rVnh4TDd3RmI2V25kTFQ5ODVjMlZ0Umk4XC9nVGFvIiwibWFjIjoiMjkzOTUyY2Q0NTIwODk4NDdkNmFlODJmNGE2NTliMWZiMGM2OTg1NWYwNDgxMDNlMDhhYjExOWY1ZWRlMmU0ZCJ9; PHPSESSID=g6beef5qfmbdic1r6i5psa9cq2
+[GRADE CARD] Fetching Grade Card 2 -> POST https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IkVvS1NzTmxlU0VlRUdhWXAyNytsYkE9PSIsInZhbHVlIjoic1hOU1hRaWNNdnpIeGFIU2JIYVc4Zz09IiwibWFjIjoiMWE1NGJmYWMzMzkyMmQwMDYwNDA1ZmNkODQ2MzdiNzAwNzlhNjM4MzIwMmIwY2I4YzY0ZWQwNTllYjNkY2QyMiJ9/1
+[GRADE CARD] Response 2 — status: 200, URL: https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IkVvS1NzTmxlU0VlRUdhWXAyNytsYkE9PSIsInZhbHVlIjoic1hOU1hRaWNNdnpIeGFIU2JIYVc4Zz09IiwibWFjIjoiMWE1NGJmYWMzMzkyMmQwMDYwNDA1ZmNkODQ2MzdiNzAwNzlhNjM4MzIwMmIwY2I4YzY0ZWQwNTllYjNkY2QyMiJ9/1
+[GRADE CARD] Info: Type=application/pdf, LengthHeader=unknown, ActualSize=64771 bytes
+[PDF DOWNLOADED] -> /Users/razzaque/campus-hub-backend/debug/gradecard-2.pdf
+[PDF TEXT LENGTH] 2348
+[PDF PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+FIRST YEAR SECOND SEMESTER EXAMINATION OF 2024-25
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+BSCH201 Chemistry-I (
+[PDF RAW LENGTH] 2348
+[PARSER INPUT PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+FIRST YEAR SECOND SEMESTER EXAMINATION OF 2024-25
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+BSCH201 Chemistry-I (Gr-A) F 2 4.0 8
+BSM201 Mathematics - IIA D 5 4.0 20
+ESCS201 Programming for Problem Solving F 2 3.0 6
+HMHU201 English C 6 2.0 12
+BSCH291 Chemistry-I Laboratory (Gr-A) A 8 1.5 12
+ESCS291 Programming for Problem Solving O 10 2.0 20
+ESME291 Engineering Graphics & Design(Gr-A) A 8 3.0 24
+HMHU291 Language Laboratory O 10 1.0 10
+Total 20.5 112
+SGPA EVEN. (2nd) SEMESTER : -
+RESULT EVEN. (2nd) SEMESTER : XP
+Please report of any discrepancy through college within 7 days,
+Otherwise, University will not re
+[EXAM TITLE] FIRST YEAR SECOND SEMESTER
+[YEAR DETECTED] FIRST
+[SEMESTER DETECTED] SECOND
+[FINAL SEMESTER NUMBER] 2
+[PARSED PDF OBJECT] {
+  "semester": "2",
+  "sgpa": null,
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "BSCH201",
+      "subjectName": "Chemistry-I (Gr-A)",
+      "grade": "F",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSM201",
+      "subjectName": "Mathematics - IIA",
+      "grade": "D",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "ESCS201",
+      "subjectName": "Programming for Problem Solving",
+      "grade": "F",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "HMHU201",
+      "subjectName": "English",
+      "grade": "C",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "BSCH291",
+      "subjectName": "Chemistry-I Laboratory (Gr-A)",
+      "grade": "A",
+      "credits": "1.5"
+    },
+    {
+      "subjectCode": "ESCS291",
+      "subjectName": "Programming for Problem Solving",
+      "grade": "O",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "ESME291",
+      "subjectName": "Engineering Graphics & Design(Gr-A)",
+      "grade": "A",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "HMHU291",
+      "subjectName": "Language Laboratory",
+      "grade": "O",
+      "credits": "1.0"
+    }
+  ]
+}
+[SEMESTER FOUND] 2
+[SUBJECTS FOUND] 8
+[SGPA] null
+[CGPA] null
+[PUSH SUCCESS]
+[CURRENT RESULT COUNT] 2
+[GRADE CARD URL] https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IktsNkp2eXdvZVwvOUZWZkEwQUhRVnVRPT0iLCJ2YWx1ZSI6ImJzMnF0OHhYXC85Q0tacnhKZnM4V0ZRPT0iLCJtYWMiOiJhMDNiNTMzNzliOTQwNzk1NjgyMWFkNmQ4MTUzOGFhMWI3ODM1OWI1ZDgxMDU3MTA5Y2EyZGUzMzY1ZDE2YTBhIn0=/1
+[GRADE CARD INPUTS] {
+  "_token": "iaUd2p2puJU6ORN6rpV7y5ixZ7e1nlXnLgkTD8Ey",
+  "rollno": "27600124001",
+  "provisional": "N"
+}
+[COOKIES BEFORE GRADE CARD] XSRF-TOKEN=eyJpdiI6IlJVNG51WDlaR2tSbUhJb2lCWGFzcVE9PSIsInZhbHVlIjoiak5GeWhZa1hpQW15cERSWDkrRDZFYTNwY0F3dnM1eVphbmIyNUhNMmo0UVQ5MlRobjRsckpZXC9MUjdnMW56eHIiLCJtYWMiOiIwMmE0OWJjZjY5ODEyY2IwZjg5MTE3M2NhMmRlNGVmNjA4ZTdjMjQyZWNhNjM4NDg0NzM4YjRkODc4NjVhOTgxIn0%3D; maulana_abul_kalam_azad_university_of_technology_session=eyJpdiI6ImNmRTRQTllSUStCZFRjXC9rcENOb3F3PT0iLCJ2YWx1ZSI6IkQzTTB0Z01tWnFrbVYweWhPMURQQ21peFkzVCtcL2ZNNld2ckpMVU1zZVd0blwvaFBUSE9mMkFyNkRGN0JVVkpzSSIsIm1hYyI6ImM3ZTBmN2JmNzg4NTk0NWViYjc3NzI2M2ZjNWI1MzU1MDgyMWUxM2EyZjA3ZjIyNGU3NDA4OWYxMzJkNWRiY2MifQ%3D%3D; PHPSESSID=g6beef5qfmbdic1r6i5psa9cq2
+[GRADE CARD] Fetching Grade Card 3 -> POST https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IktsNkp2eXdvZVwvOUZWZkEwQUhRVnVRPT0iLCJ2YWx1ZSI6ImJzMnF0OHhYXC85Q0tacnhKZnM4V0ZRPT0iLCJtYWMiOiJhMDNiNTMzNzliOTQwNzk1NjgyMWFkNmQ4MTUzOGFhMWI3ODM1OWI1ZDgxMDU3MTA5Y2EyZGUzMzY1ZDE2YTBhIn0=/1
+[GRADE CARD] Response 3 — status: 200, URL: https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IktsNkp2eXdvZVwvOUZWZkEwQUhRVnVRPT0iLCJ2YWx1ZSI6ImJzMnF0OHhYXC85Q0tacnhKZnM4V0ZRPT0iLCJtYWMiOiJhMDNiNTMzNzliOTQwNzk1NjgyMWFkNmQ4MTUzOGFhMWI3ODM1OWI1ZDgxMDU3MTA5Y2EyZGUzMzY1ZDE2YTBhIn0=/1
+[GRADE CARD] Info: Type=application/pdf, LengthHeader=unknown, ActualSize=64496 bytes
+[PDF DOWNLOADED] -> /Users/razzaque/campus-hub-backend/debug/gradecard-1.pdf
+[PDF TEXT LENGTH] 2290
+[PDF PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+FIRST YEAR FIRST SEMESTER EXAMINATION OF 2025-26
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+BSPH101 Physics I (Gr 
+[PDF RAW LENGTH] 2290
+[PARSER INPUT PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+FIRST YEAR FIRST SEMESTER EXAMINATION OF 2025-26
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+BSPH101 Physics I (Gr A) C 6 4.0 24
+BSM101 Mathematics I A C 6 4.0 24
+ESEE101 Basic Electrical Engineering D 5 4.0 20
+BSPH191 Physics I Laboratory (Gr A) D 5 1.5 7.5
+ESEE191 Basic Electrical Engineering Laboratory A 8 1.0 8
+ESME192 Workshop/Manufacturing Practices(Gr A) A 8 3.0 24
+Total 17.5 107.5
+SGPA ODD. (1st) SEMESTER : 6.14
+RESULT ODD. (1st) SEMESTER : P
+YGPA
+Please report of any discrepancy through college within 7 days,
+Otherwise, University will not responsible for any errors in transcripts (if any)
+.
+Kolkata
+[EXAM TITLE] FIRST YEAR FIRST SEMESTER
+[YEAR DETECTED] FIRST
+[SEMESTER DETECTED] FIRST
+[FINAL SEMESTER NUMBER] 1
+[PARSED PDF OBJECT] {
+  "semester": "1",
+  "sgpa": "6.14",
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "BSPH101",
+      "subjectName": "Physics I (Gr A)",
+      "grade": "C",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSM101",
+      "subjectName": "Mathematics I A",
+      "grade": "C",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "ESEE101",
+      "subjectName": "Basic Electrical Engineering",
+      "grade": "D",
+      "credits": "4.0"
+    },
+    {
+      "subjectCode": "BSPH191",
+      "subjectName": "Physics I Laboratory (Gr A)",
+      "grade": "D",
+      "credits": "1.5"
+    },
+    {
+      "subjectCode": "ESEE191",
+      "subjectName": "Basic Electrical Engineering Laboratory",
+      "grade": "A",
+      "credits": "1.0"
+    },
+    {
+      "subjectCode": "ESME192",
+      "subjectName": "Workshop/Manufacturing Practices(Gr A)",
+      "grade": "A",
+      "credits": "3.0"
+    }
+  ]
+}
+[SEMESTER FOUND] 1
+[SUBJECTS FOUND] 6
+[SGPA] 6.14
+[CGPA] null
+[PUSH SUCCESS]
+[CURRENT RESULT COUNT] 3
+[GRADE CARD URL] https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IjlFeFwvQWRleFwveVJUV0E2UXhFYjJaQT09IiwidmFsdWUiOiIrc3VkeWkwUG4yZ0lFT2NDb3ZSSUh3PT0iLCJtYWMiOiI3MDQ0MTdmOGQxYTdlOGYyMzBhYTg4YjQ2ZmZiMzMxNmIxNjQ1NDIxNDVhOWExYTI4OWQxMGRiNWMxYmVmYTk2In0=/1
+[GRADE CARD INPUTS] {
+  "_token": "iaUd2p2puJU6ORN6rpV7y5ixZ7e1nlXnLgkTD8Ey",
+  "rollno": "27600124001",
+  "provisional": "N"
+}
+[COOKIES BEFORE GRADE CARD] XSRF-TOKEN=eyJpdiI6IlJFbG1hcU1jbDhSRFRlc24zNUx0T3c9PSIsInZhbHVlIjoiRVM5Z0NhNWE1bElzR1hRMUdlQXd5MUk5eVRYMWt5dHhsWkxlSzBuZXExM2NSUG5TbncySVFcL0dmYVowQzdlWlgiLCJtYWMiOiJjZWE1MzAwYzlmYWE0NjQxMmU5MTAyMWZlMzUzMjI1YTg4MzhmODk0MWQ5MzY1YzVhMzE0MjQyNDk1MWJkNTg2In0%3D; maulana_abul_kalam_azad_university_of_technology_session=eyJpdiI6IjZ5d0lhVlZuaWpqVXVUcDRQMlpYUHc9PSIsInZhbHVlIjoiZ1dwbWVuYnArSmJrRGRheUdUaWxvT3BJTnNvdUthcndtaHJcL2kwemVtMG03aXRJR1NTVm9iVklPUVh0d3ZwT3YiLCJtYWMiOiI5MDZkMTc2Mzc5NDMzNThjYzkxZjE0NGRkNTkyYTFiM2U3YzhlYWRmZWNmMTc5Y2NmN2M1NWY5NTQ0NDUwNjFhIn0%3D; PHPSESSID=g6beef5qfmbdic1r6i5psa9cq2
+[GRADE CARD] Fetching Grade Card 4 -> POST https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IjlFeFwvQWRleFwveVJUV0E2UXhFYjJaQT09IiwidmFsdWUiOiIrc3VkeWkwUG4yZ0lFT2NDb3ZSSUh3PT0iLCJtYWMiOiI3MDQ0MTdmOGQxYTdlOGYyMzBhYTg4YjQ2ZmZiMzMxNmIxNjQ1NDIxNDVhOWExYTI4OWQxMGRiNWMxYmVmYTk2In0=/1
+[GRADE CARD] Response 4 — status: 200, URL: https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6IjlFeFwvQWRleFwveVJUV0E2UXhFYjJaQT09IiwidmFsdWUiOiIrc3VkeWkwUG4yZ0lFT2NDb3ZSSUh3PT0iLCJtYWMiOiI3MDQ0MTdmOGQxYTdlOGYyMzBhYTg4YjQ2ZmZiMzMxNmIxNjQ1NDIxNDVhOWExYTI4OWQxMGRiNWMxYmVmYTk2In0=/1
+[GRADE CARD] Info: Type=application/pdf, LengthHeader=unknown, ActualSize=65011 bytes
+[PDF DOWNLOADED] -> /Users/razzaque/campus-hub-backend/debug/gradecard-3.pdf
+[PDF TEXT LENGTH] 2472
+[PDF PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+SECOND YEAR FIRST SEMESTER EXAMINATION OF 2025-26
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+ESC301 Analog and Dig
+[PDF RAW LENGTH] 2472
+[PARSER INPUT PREVIEW] MAULANA ABUL KALAM AZAD UNIVERSITY OF TECHNOLOGY, WEST BENGAL
+(Formerly known as West Bengal University of Technology)
+PROVISIONAL GRADE CARD
+SECOND YEAR FIRST SEMESTER EXAMINATION OF 2025-26
+NAME : ABDUR RAZZAQUE ROLL NO. : 27600124001
+REGISTRATION NO : 242760110064 OF 2024-25
+PROGRAM: BACHELOR OF TECHNOLOGY IN COMPUTER SCIENCE & ENGINEERING
+COLLEGE / INSTITUTION: 276-BUDGE BUDGE INSTITUTE OF TECHNOLOGY
+Subject Code Subjects Offered Letter
+Grade Points Credit Credit
+Points
+ESC301 Analog and Digital Electronics F 2 3.0 6
+PCC-CS301 Data Structure & Algorithms D 5 3.0 15
+PCC-CS302 Computer Organisation F 2 3.0 6
+BSC301 Mathematics-III (Differential Calculus) F 2 2.0 4
+HSMC301 Economics for Engineers (Humanities-II) B 7 3.0 21
+PCC-CS393 IT Workshop (Sci Lab/MATLAB/Python/R) E 9 2.0 18
+ES-CS391 Analog and Digital Electronics Lab A 8 2.0 16
+PCC-CS391 Data Structure & Algorithms Lab E 9 2.0 18
+PCC-CS392 Computer Organisation Lab E 9 2.0 18
+Total 22 122
+SGPA ODD. (3rd) SEMESTER : -
+RESULT ODD
+[EXAM TITLE] SECOND YEAR FIRST SEMESTER
+[YEAR DETECTED] SECOND
+[SEMESTER DETECTED] FIRST
+[FINAL SEMESTER NUMBER] 3
+[PARSED PDF OBJECT] {
+  "semester": "3",
+  "sgpa": null,
+  "cgpa": null,
+  "subjects": [
+    {
+      "subjectCode": "ESC301",
+      "subjectName": "Analog and Digital Electronics",
+      "grade": "F",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "PCC-CS301",
+      "subjectName": "Data Structure & Algorithms",
+      "grade": "D",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "PCC-CS302",
+      "subjectName": "Computer Organisation",
+      "grade": "F",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "BSC301",
+      "subjectName": "Mathematics-III (Differential Calculus)",
+      "grade": "F",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "HSMC301",
+      "subjectName": "Economics for Engineers (Humanities-II)",
+      "grade": "B",
+      "credits": "3.0"
+    },
+    {
+      "subjectCode": "PCC-CS393",
+      "subjectName": "IT Workshop (Sci Lab/MATLAB/Python/R)",
+      "grade": "E",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "ES-CS391",
+      "subjectName": "Analog and Digital Electronics Lab",
+      "grade": "A",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "PCC-CS391",
+      "subjectName": "Data Structure & Algorithms Lab",
+      "grade": "E",
+      "credits": "2.0"
+    },
+    {
+      "subjectCode": "PCC-CS392",
+      "subjectName": "Computer Organisation Lab",
+      "grade": "E",
+      "credits": "2.0"
+    }
+  ]
+}
+[SEMESTER FOUND] 3
+[SUBJECTS FOUND] 9
+[SGPA] null
+[CGPA] null
+[PUSH SUCCESS]
+[CURRENT RESULT COUNT] 4
+[GRADE CARD URL] https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6InV2dGxGNitnZlFvaGpiWGVwMSs0YkE9PSIsInZhbHVlIjoibldmaVFHaWpEWXVkMExDN25GVzJvdz09IiwibWFjIjoiNDZkYjM4NjA1OTUwYzk1NjgzNGU4Y2Q2YzM2NzYxYzgzZWVhMWE0ZWFlZDQwOTI3NzgyNmIxM2I2MWFkMTJjNiJ9/true
+[GRADE CARD INPUTS] {
+  "_token": "iaUd2p2puJU6ORN6rpV7y5ixZ7e1nlXnLgkTD8Ey",
+  "rollno": "27600124001",
+  "provisional": "Y"
+}
+[COOKIES BEFORE GRADE CARD] XSRF-TOKEN=eyJpdiI6Ik1BYisrcFhROVNhcmtJanhESTlidWc9PSIsInZhbHVlIjoiUnVJR1BQbDBRd0VXcFBMMHRLMnhkMTFtVHBJaElDekc3RjBBeVdQelwvOTRpNVpiekEzQW56UDVcL2dNZWNIbldUIiwibWFjIjoiNzg4NDViYTZkMDdmNGVkNjQ2MmE4ODY2ODcyYzI3NDRjYzI1NzUxOTQ3NjFkMWMxNmIxMGY4MzExODExNDgwYyJ9; maulana_abul_kalam_azad_university_of_technology_session=eyJpdiI6ImpOOTZ0TDN0endoUkRPQlRmSTI1cHc9PSIsInZhbHVlIjoiWjJhRXQ3UGtzZUJvcnpXdlwvUEpwa2NzWk9XTUJ1M0x4RUYyZFFOMmhLWVB4TExYd3FpbFpHQ2xxakVZTTZnSHkiLCJtYWMiOiJhNDlhNTc4ZmZkNDBjZDc5Zjc2NWEzOWE0M2YyMjc4YzFiYzY5MDg1ODcxMWIwZDhlZmNiMWViNjIxZmY4MjFiIn0%3D; PHPSESSID=g6beef5qfmbdic1r6i5psa9cq2
+[GRADE CARD] Fetching Grade Card 5 -> POST https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6InV2dGxGNitnZlFvaGpiWGVwMSs0YkE9PSIsInZhbHVlIjoibldmaVFHaWpEWXVkMExDN25GVzJvdz09IiwibWFjIjoiNDZkYjM4NjA1OTUwYzk1NjgzNGU4Y2Q2YzM2NzYxYzgzZWVhMWE0ZWFlZDQwOTI3NzgyNmIxM2I2MWFkMTJjNiJ9/true
+[GRADE CARD] Response 5 — status: 200, URL: https://makaut1.ucanapply.com/smartexam/public/results-details/eyJpdiI6InV2dGxGNitnZlFvaGpiWGVwMSs0YkE9PSIsInZhbHVlIjoibldmaVFHaWpEWXVkMExDN25GVzJvdz09IiwibWFjIjoiNDZkYjM4NjA1OTUwYzk1NjgzNGU4Y2Q2YzM2NzYxYzgzZWVhMWE0ZWFlZDQwOTI3NzgyNmIxM2I2MWFkMTJjNiJ9/true
+[GRADE CARD] Info: Type=text/html; charset=UTF-8, LengthHeader=52, ActualSize=52 bytes
+[GRADE CARD] Rejected gradecard 5: Response is not a PDF.
+[GRADE CARD] Preview: 	Not eligible for De...
+[MERGE] Semester 4 | Match found for Computer Architecture
+[MERGE] Semester 4 | Match found for Design & Analysis of Algorithms
+[MERGE] Semester 3 | Adding PA-only subject IT Workshop (Sci Lab/MATLAB/Python/R)
+[MERGE] Semester 3 | Adding PA-only subject Analog and Digital Electronics Lab
+[MERGE] Semester 3 | Adding PA-only subject Data Structure & Algorithms Lab
+[MERGE] Semester 3 | Adding PA-only subject Computer Organisation Lab
+[MAKAUT] Fetching student details → GET https://makaut1.ucanapply.com/smartexam/public/student/student-basic-details
+[MAKAUT] Student details response — status: 200, body length: 10009
+[MAKAUT] HTML saved → /Users/razzaque/campus-hub-backend/debug/student-details.html (10009 bytes)
+
+[MAKAUT] ─── HTML Structure ─────────────────────────────────
+  Page title : Maulana Abul Kalam Azad University of Technology
+  <table>    : 1
+  <form>     : 0
+  <label>    : 0
+  <td>       : 23
+[MAKAUT] ────────────────────────────────────────────────────
+
+[MAKAUT] Raw label→value dict: {
+  'student name': 'ABDUR RAZZAQUE',
+  'roll no': '27600124001',
+  'reg. no': '242760110064( 2024-25 )',
+  email: 'razzaqueabdur165@gmail.com',
+  mobile: '6207506369',
+  "father's name": 'MOHAMMAD SAZID',
+  "mother's name": 'RAZIA HASAN',
+  dob: '14/01/2007',
+  'institute name(code)': 'BUDGE BUDGE INSTITUTE OF TECHNOLOGY(276)',
+  'course name(code)': 'Bachelor of Technology in Computer Science & Engineering(001)',
+  'abc id': '476183106112'
+}
+[MAKAUT] ─── Extracted Student Profile ──────────────────────
+  fullName: ABDUR RAZZAQUE
+  rollNumber: 27600124001
+  registrationNumber: 242760110064( 2024-25 )
+  email: razzaqueabdur165@gmail.com
+  mobile: 6207506369
+  instituteName: BUDGE BUDGE INSTITUTE OF TECHNOLOGY(276)
+  courseName: Bachelor of Technology in Computer Science & Engineering(001)
+  abcId: 476183106112
+  profilePhotoUrl: https://smartexam-mum.s3.amazonaws.com/Photo_Signature/makaut1/photo/makaut11734699220TS0437102.jpg
+  verified: true
+[MAKAUT] ────────────────────────────────────────────────────
+
+[MAKAUT] Downloading profile photo from https://smartexam-mum.s3.amazonaws.com/Photo_Signature/makaut1/photo/makaut11734699220TS0437102.jpg ...
+[SUPABASE] Photo uploaded successfully: https://czfylavvvwwohqkrhbdb.supabase.co/storage/v1/object/public/student-profiles/27600124001.jpg
+[SUPABASE] Student upserted successfully (roll: 27600124001)
+[MAKAUT] Semester 3: 9 subjects parsed.
+[MAKAUT] Semester 4: 6 subjects parsed.
+[SUPABASE] CA Marks upserted successfully. Saved 15 rows to Supabase for roll: 27600124001
+[RESULTS BEFORE DEDUP] 4
+[RESULTS AFTER DEDUP] 3
+[SEMESTERS SAVED] 3
+[GRADES SAVED] 23
+[RESULTS PARSED]
+[
+  {
+    "semester": "1",
+    "sgpa": "6.14",
+    "cgpa": null,
+    "subjects": [
+      {
+        "subjectCode": "BSPH101",
+        "subjectName": "Physics I (Gr A)",
+        "grade": "C",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "BSM101",
+        "subjectName": "Mathematics I A",
+        "grade": "C",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "ESEE101",
+        "subjectName": "Basic Electrical Engineering",
+        "grade": "D",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "BSPH191",
+        "subjectName": "Physics I Laboratory (Gr A)",
+        "grade": "D",
+        "credits": "1.5"
+      },
+      {
+        "subjectCode": "ESEE191",
+        "subjectName": "Basic Electrical Engineering Laboratory",
+        "grade": "A",
+        "credits": "1.0"
+      },
+      {
+        "subjectCode": "ESME192",
+        "subjectName": "Workshop/Manufacturing Practices(Gr A)",
+        "grade": "A",
+        "credits": "3.0"
+      }
+    ]
+  },
+  {
+    "semester": "2",
+    "sgpa": null,
+    "cgpa": null,
+    "subjects": [
+      {
+        "subjectCode": "BSCH201",
+        "subjectName": "Chemistry-I (Gr-A)",
+        "grade": "F",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "BSM201",
+        "subjectName": "Mathematics - IIA",
+        "grade": "D",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "ESCS201",
+        "subjectName": "Programming for Problem Solving",
+        "grade": "F",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "HMHU201",
+        "subjectName": "English",
+        "grade": "C",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "BSCH291",
+        "subjectName": "Chemistry-I Laboratory (Gr-A)",
+        "grade": "A",
+        "credits": "1.5"
+      },
+      {
+        "subjectCode": "ESCS291",
+        "subjectName": "Programming for Problem Solving",
+        "grade": "O",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "ESME291",
+        "subjectName": "Engineering Graphics & Design(Gr-A)",
+        "grade": "A",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "HMHU291",
+        "subjectName": "Language Laboratory",
+        "grade": "O",
+        "credits": "1.0"
+      }
+    ]
+  },
+  {
+    "semester": "3",
+    "sgpa": null,
+    "cgpa": null,
+    "subjects": [
+      {
+        "subjectCode": "ESC301",
+        "subjectName": "Analog and Digital Electronics",
+        "grade": "F",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "PCC-CS301",
+        "subjectName": "Data Structure & Algorithms",
+        "grade": "D",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "PCC-CS302",
+        "subjectName": "Computer Organisation",
+        "grade": "F",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "BSC301",
+        "subjectName": "Mathematics-III (Differential Calculus)",
+        "grade": "F",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "HSMC301",
+        "subjectName": "Economics for Engineers (Humanities-II)",
+        "grade": "B",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "PCC-CS393",
+        "subjectName": "IT Workshop (Sci Lab/MATLAB/Python/R)",
+        "grade": "E",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "ES-CS391",
+        "subjectName": "Analog and Digital Electronics Lab",
+        "grade": "A",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "PCC-CS391",
+        "subjectName": "Data Structure & Algorithms Lab",
+        "grade": "E",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "PCC-CS392",
+        "subjectName": "Computer Organisation Lab",
+        "grade": "E",
+        "credits": "2.0"
+      }
+    ]
+  }
+]
+[RESULT COUNT] 3
+[FINAL RESULTS JSON]
+[
+  {
+    "semester": "1",
+    "sgpa": "6.14",
+    "cgpa": null,
+    "subjects": [
+      {
+        "subjectCode": "BSPH101",
+        "subjectName": "Physics I (Gr A)",
+        "grade": "C",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "BSM101",
+        "subjectName": "Mathematics I A",
+        "grade": "C",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "ESEE101",
+        "subjectName": "Basic Electrical Engineering",
+        "grade": "D",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "BSPH191",
+        "subjectName": "Physics I Laboratory (Gr A)",
+        "grade": "D",
+        "credits": "1.5"
+      },
+      {
+        "subjectCode": "ESEE191",
+        "subjectName": "Basic Electrical Engineering Laboratory",
+        "grade": "A",
+        "credits": "1.0"
+      },
+      {
+        "subjectCode": "ESME192",
+        "subjectName": "Workshop/Manufacturing Practices(Gr A)",
+        "grade": "A",
+        "credits": "3.0"
+      }
+    ]
+  },
+  {
+    "semester": "2",
+    "sgpa": null,
+    "cgpa": null,
+    "subjects": [
+      {
+        "subjectCode": "BSCH201",
+        "subjectName": "Chemistry-I (Gr-A)",
+        "grade": "F",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "BSM201",
+        "subjectName": "Mathematics - IIA",
+        "grade": "D",
+        "credits": "4.0"
+      },
+      {
+        "subjectCode": "ESCS201",
+        "subjectName": "Programming for Problem Solving",
+        "grade": "F",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "HMHU201",
+        "subjectName": "English",
+        "grade": "C",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "BSCH291",
+        "subjectName": "Chemistry-I Laboratory (Gr-A)",
+        "grade": "A",
+        "credits": "1.5"
+      },
+      {
+        "subjectCode": "ESCS291",
+        "subjectName": "Programming for Problem Solving",
+        "grade": "O",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "ESME291",
+        "subjectName": "Engineering Graphics & Design(Gr-A)",
+        "grade": "A",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "HMHU291",
+        "subjectName": "Language Laboratory",
+        "grade": "O",
+        "credits": "1.0"
+      }
+    ]
+  },
+  {
+    "semester": "3",
+    "sgpa": null,
+    "cgpa": null,
+    "subjects": [
+      {
+        "subjectCode": "ESC301",
+        "subjectName": "Analog and Digital Electronics",
+        "grade": "F",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "PCC-CS301",
+        "subjectName": "Data Structure & Algorithms",
+        "grade": "D",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "PCC-CS302",
+        "subjectName": "Computer Organisation",
+        "grade": "F",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "BSC301",
+        "subjectName": "Mathematics-III (Differential Calculus)",
+        "grade": "F",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "HSMC301",
+        "subjectName": "Economics for Engineers (Humanities-II)",
+        "grade": "B",
+        "credits": "3.0"
+      },
+      {
+        "subjectCode": "PCC-CS393",
+        "subjectName": "IT Workshop (Sci Lab/MATLAB/Python/R)",
+        "grade": "E",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "ES-CS391",
+        "subjectName": "Analog and Digital Electronics Lab",
+        "grade": "A",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "PCC-CS391",
+        "subjectName": "Data Structure & Algorithms Lab",
+        "grade": "E",
+        "credits": "2.0"
+      },
+      {
+        "subjectCode": "PCC-CS392",
+        "subjectName": "Computer Organisation Lab",
+        "grade": "E",
+        "credits": "2.0"
+      }
+    ]
+  }
+]
+[FINAL COUNT] 3
+[API] GET /student/27600124001/results requested

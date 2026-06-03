@@ -8,6 +8,7 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
+const { extractPdfText, buildResultObject } = require("./services/resultParser");
 
 // ─── Supabase client (service role — bypasses RLS) ────────────────────────────
 console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
@@ -167,6 +168,7 @@ app.post("/verify-student", async (req, res) => {
     let dashboardCaptured = false;
     let dashboardHtmlLength = 0;
     let dashboardError = null;
+    let dashboardHtml = "";
 
     try {
       const dashboardUrl = `${BASE_URL}/student/dashboard`;
@@ -178,8 +180,8 @@ app.post("/verify-student", async (req, res) => {
       
       const dashboardFinalUrl = dashboardRes.request?.res?.responseUrl ?? dashboardUrl;
       const dashboardHtmlRaw = dashboardRes.data;
-      const dashboardHtml = typeof dashboardHtmlRaw === "string" ? dashboardHtmlRaw : JSON.stringify(dashboardHtmlRaw);
-      dashboardHtmlLength = dashboardHtml.length;
+      dashboardHtml = typeof dashboardHtmlRaw === "string" ? dashboardHtmlRaw : JSON.stringify(dashboardHtmlRaw);
+      dashboardHtmlLength = dashboardHtml?.length || 0;
 
       console.log(`[MAKAUT] Dashboard response — status: ${dashboardRes.status}, URL: ${dashboardFinalUrl}, body length: ${dashboardHtmlLength}`);
 
@@ -201,6 +203,7 @@ app.post("/verify-student", async (req, res) => {
     let caMarksCaptured = false;
     let caMarksHtmlLength = 0;
     let caMarksError = null;
+    let caMarksHtml = "";
 
     try {
       const caMarksUrl = `${BASE_URL}/student/student-marks-display`;
@@ -211,8 +214,8 @@ app.post("/verify-student", async (req, res) => {
       });
 
       const caMarksHtmlRaw = caMarksRes.data;
-      const caMarksHtml = typeof caMarksHtmlRaw === "string" ? caMarksHtmlRaw : JSON.stringify(caMarksHtmlRaw);
-      caMarksHtmlLength = caMarksHtml.length;
+      caMarksHtml = typeof caMarksHtmlRaw === "string" ? caMarksHtmlRaw : JSON.stringify(caMarksHtmlRaw);
+      caMarksHtmlLength = caMarksHtml?.length || 0;
 
       console.log(`[MAKAUT] CA Marks response — status: ${caMarksRes.status}, body length: ${caMarksHtmlLength}`);
 
@@ -221,7 +224,7 @@ app.post("/verify-student", async (req, res) => {
         fs.mkdirSync(debugDirDashboard, { recursive: true });
       }
       const caMarksFilePath = path.join(debugDirDashboard, "ca-marks.html");
-      fs.writeFileSync(caMarksFilePath, caMarksHtml, "utf8");
+      fs.writeFileSync(caMarksFilePath, caMarksHtml || "", "utf8");
 
       caMarksCaptured = true;
     } catch (caErr) {
@@ -232,11 +235,10 @@ app.post("/verify-student", async (req, res) => {
 
     // ── NEW STEP 1.6: Parse CA Marks ─────────────────────────────────────────
     let caMarksData = null;
-    if (caMarksCaptured) {
+    if (caMarksCaptured && caMarksHtml) {
       try {
-        const caHtml = fs.readFileSync(path.join(__dirname, "debug", "ca-marks.html"), "utf8");
-        caMarksData = extractCaMarks(caHtml);
-        console.log(`[MAKAUT] Parsed CA Marks: ${caMarksData.semesters.length} semesters found.`);
+        caMarksData = extractCaMarks(caMarksHtml);
+        console.log(`[MAKAUT] Parsed CA Marks: ${caMarksData?.semesters?.length || 0} semesters found.`);
       } catch (parseErr) {
         console.error("[MAKAUT] Failed to parse CA Marks:", parseErr.message);
       }
@@ -246,6 +248,7 @@ app.post("/verify-student", async (req, res) => {
     let pcaMarksCaptured = false;
     let pcaMarksHtmlLength = 0;
     let pcaMarksError = null;
+    let pcaMarksHtml = "";
 
     try {
       const pcaMarksUrl = `${BASE_URL}/student/student-practical-assessment`;
@@ -256,8 +259,8 @@ app.post("/verify-student", async (req, res) => {
       });
 
       const pcaMarksHtmlRaw = pcaMarksRes.data;
-      const pcaMarksHtml = typeof pcaMarksHtmlRaw === "string" ? pcaMarksHtmlRaw : JSON.stringify(pcaMarksHtmlRaw);
-      pcaMarksHtmlLength = pcaMarksHtml.length;
+      pcaMarksHtml = typeof pcaMarksHtmlRaw === "string" ? pcaMarksHtmlRaw : JSON.stringify(pcaMarksHtmlRaw);
+      pcaMarksHtmlLength = pcaMarksHtml?.length || 0;
 
       console.log(`[MAKAUT] PCA Marks response — status: ${pcaMarksRes.status}, body length: ${pcaMarksHtmlLength}`);
 
@@ -266,7 +269,7 @@ app.post("/verify-student", async (req, res) => {
         fs.mkdirSync(debugDirDashboard, { recursive: true });
       }
       const pcaMarksFilePath = path.join(debugDirDashboard, "pca-marks.html");
-      fs.writeFileSync(pcaMarksFilePath, pcaMarksHtml, "utf8");
+      fs.writeFileSync(pcaMarksFilePath, pcaMarksHtml || "", "utf8");
 
       pcaMarksCaptured = true;
     } catch (pcaErr) {
@@ -277,11 +280,10 @@ app.post("/verify-student", async (req, res) => {
 
     // ── NEW STEP 1.8: Parse PCA Marks & Merge ────────────────────────────────
     let pcaMarksData = null;
-    if (pcaMarksCaptured) {
+    if (pcaMarksCaptured && pcaMarksHtml) {
       try {
-        const pcaHtml = fs.readFileSync(path.join(__dirname, "debug", "pca-marks.html"), "utf8");
-        pcaMarksData = extractPcaMarks(pcaHtml);
-        console.log(`[MAKAUT] Parsed PCA Marks: ${pcaMarksData.semesters.length} semesters found.`);
+        pcaMarksData = extractPcaMarks(pcaMarksHtml);
+        console.log(`[MAKAUT] Parsed PCA Marks: ${pcaMarksData?.semesters?.length || 0} semesters found.`);
       } catch (parseErr) {
         console.error("[MAKAUT] Failed to parse PCA Marks:", parseErr.message);
       }
@@ -291,6 +293,8 @@ app.post("/verify-student", async (req, res) => {
     let resultCaptured = false;
     let resultHtmlLength = 0;
     let resultError = null;
+    let resultHtml = "";
+    let parsedResults = [];
 
     try {
       const resultUrl = `${BASE_URL}/student/student-activity`;
@@ -301,8 +305,8 @@ app.post("/verify-student", async (req, res) => {
       });
 
       const resultHtmlRaw = resultRes.data;
-      const resultHtml = typeof resultHtmlRaw === "string" ? resultHtmlRaw : JSON.stringify(resultHtmlRaw);
-      resultHtmlLength = resultHtml.length;
+      resultHtml = typeof resultHtmlRaw === "string" ? resultHtmlRaw : JSON.stringify(resultHtmlRaw);
+      resultHtmlLength = resultHtml?.length || 0;
 
       console.log(`[RESULT] Results response — status: ${resultRes.status}, body length: ${resultHtmlLength}`);
 
@@ -311,7 +315,7 @@ app.post("/verify-student", async (req, res) => {
         fs.mkdirSync(debugDirDashboard, { recursive: true });
       }
       const resultFilePath = path.join(debugDirDashboard, "result.html");
-      fs.writeFileSync(resultFilePath, resultHtml, "utf8");
+      fs.writeFileSync(resultFilePath, resultHtml || "", "utf8");
 
       resultCaptured = true;
     } catch (resErr) {
@@ -320,13 +324,171 @@ app.post("/verify-student", async (req, res) => {
       resultError = resErr.message;
     }
 
+    // Capture Result Links
+    const resultLinks = [];
+    let gradecardsFound = 0;
+    if (resultCaptured && resultHtml) {
+      try {
+        const $result = cheerio.load(resultHtml);
+
+        $result("form[action*='results-details']").each((_, form) => {
+          const action = $result(form).attr("action");
+          if (action) {
+            gradecardsFound++;
+            const formData = { action };
+            
+            // Extract all hidden inputs (like _token, rollno, provisional)
+            $result(form).find("input").each((__, input) => {
+              const name = $result(input).attr("name");
+              const value = $result(input).val();
+              if (name) {
+                formData[name] = value;
+              }
+            });
+
+            // Try to find semester name from the row if possible
+            const tr = $result(form).closest("tr");
+            let semesterStr = null;
+            if (tr.length) {
+                const text = tr.text().toLowerCase();
+                if (text.includes("first") || text.includes("sem-1") || text.includes(" 1 ")) semesterStr = 1;
+                else if (text.includes("second") || text.includes("sem-2") || text.includes(" 2 ")) semesterStr = 2;
+                else if (text.includes("third") || text.includes("sem-3") || text.includes(" 3 ")) semesterStr = 3;
+                else if (text.includes("fourth") || text.includes("sem-4") || text.includes(" 4 ")) semesterStr = 4;
+                else if (text.includes("fifth") || text.includes("sem-5") || text.includes(" 5 ")) semesterStr = 5;
+                else if (text.includes("sixth") || text.includes("sem-6") || text.includes(" 6 ")) semesterStr = 6;
+                else if (text.includes("seventh") || text.includes("sem-7") || text.includes(" 7 ")) semesterStr = 7;
+                else if (text.includes("eighth") || text.includes("sem-8") || text.includes(" 8 ")) semesterStr = 8;
+            }
+            formData.semester = semesterStr;
+
+            resultLinks.push(formData);
+          }
+        });
+
+        console.log("[RESULT] Grade Card Links Found:", resultLinks.length);
+
+        // Fetch Grade Cards
+        for (let i = 0; i < resultLinks.length; i++) {
+          try {
+            const { action: gradeUrl, semester, ...inputs } = resultLinks[i];
+
+            const formParams = new URLSearchParams();
+            for (const [k, v] of Object.entries(inputs)) {
+              formParams.append(k, v);
+            }
+
+            console.log("[GRADE CARD URL]", gradeUrl);
+            console.log("[GRADE CARD INPUTS]", JSON.stringify(inputs, null, 2));
+            
+            try {
+              const cookieStr = jar.getCookieStringSync("https://makaut1.ucanapply.com");
+              console.log("[COOKIES BEFORE GRADE CARD]", cookieStr);
+            } catch (err) {
+              console.error("[COOKIES ERROR]", err.message);
+            }
+
+            console.log(`[GRADE CARD] Fetching Grade Card ${i + 1} -> POST ${gradeUrl}`);
+            const gradeRes = await client.post(gradeUrl, formParams.toString(), {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Referer": `${BASE_URL}/student/student-activity`,
+                "Origin": "https://makaut1.ucanapply.com",
+                "X-CSRF-TOKEN": inputs["_token"] || ""
+              },
+              responseType: "arraybuffer", // Treat response as binary
+              validateStatus: () => true
+            });
+
+            const finalUrl = gradeRes.request?.res?.responseUrl ?? "unknown";
+            const contentType = gradeRes.headers['content-type'] || "";
+            const contentLength = gradeRes.headers['content-length'] || "unknown";
+            
+            // Check if response is PDF
+            const isPdfType = contentType.includes("application/pdf");
+            const dataBuffer = Buffer.from(gradeRes.data);
+            const size = dataBuffer.length;
+            const previewStr = dataBuffer.toString("utf8", 0, Math.min(size, 20));
+            const isPdfSignature = previewStr.startsWith("%PDF");
+
+            console.log(`[GRADE CARD] Response ${i + 1} — status: ${gradeRes.status}, URL: ${finalUrl}`);
+            console.log(`[GRADE CARD] Info: Type=${contentType}, LengthHeader=${contentLength}, ActualSize=${size} bytes`);
+            
+            if (!isPdfType && !isPdfSignature) {
+                // If it's not a PDF, it might be an error page
+                const errorText = dataBuffer.toString("utf8");
+                console.error(`[GRADE CARD] Rejected gradecard ${i+1}: Response is not a PDF.`);
+                if (errorText.includes("419") || errorText.toLowerCase().includes("page expired") || errorText.toLowerCase().includes("csrf")) {
+                   console.error(`[GRADE CARD] Error details: 419 Page Expired / CSRF validation failure detected.`);
+                }
+                console.log(`[GRADE CARD] Preview: ${previewStr.replace(/\n/g, " ")}...`);
+                continue; // Skip saving
+            }
+
+            // Strictly use gradecard-X.pdf (ignoring semester to prevent overwrites as requested)
+            const fileName = semester ? `gradecard-${semester}.pdf` : `gradecard-${i + 1}.pdf`;
+            const savePath = path.join(__dirname, "debug", fileName);
+            fs.writeFileSync(savePath, dataBuffer);
+
+            console.log(`[PDF DOWNLOADED] -> ${savePath}`);
+            
+            try {
+               const diskBuffer = fs.readFileSync(savePath);
+               const text = await extractPdfText(diskBuffer);
+               
+               if (!text || text.trim().length === 0) {
+                   console.warn(`[PDF PARSE] Warning: Extracted text is empty for ${savePath}`);
+                   continue;
+               }
+               console.log("[PDF RAW LENGTH]", text.length);
+               console.log("[PARSER INPUT PREVIEW]", text.slice(0,1000));
+               
+               const txtFileName = semester ? `gradecard-${semester}.txt` : `gradecard-${i + 1}.txt`;
+               fs.writeFileSync(path.join(__dirname, "debug", txtFileName), text, "utf8");
+               
+               if (i === 0) {
+                   fs.writeFileSync(path.join(__dirname, "debug", "extracted-gradecard.txt"), text, "utf8");
+               }
+               
+               const parsedResult = buildResultObject(text, semester);
+               console.log("[PARSED PDF OBJECT]", JSON.stringify(parsedResult, null, 2));
+               
+               if (parsedResult) {
+                   console.log(`[SEMESTER FOUND] ${parsedResult.semester}`);
+                   console.log(`[SUBJECTS FOUND] ${parsedResult.subjects.length}`);
+                   console.log(`[SGPA] ${parsedResult.sgpa}`);
+                   console.log(`[CGPA] ${parsedResult.cgpa}`);
+                   
+                   parsedResults.push(parsedResult);
+                   console.log("[PUSH SUCCESS]");
+                   console.log(`[CURRENT RESULT COUNT] ${parsedResults.length}`);
+               }
+            } catch (err) {
+               console.error(`[PDF PARSE ERROR] Failed at ${savePath}:`, err.message);
+               continue;
+            }
+          } catch (gradeErr) {
+            console.error(`[RESULT] Failed to fetch gradecard ${i+1}:`, gradeErr.message);
+          }
+        }
+      } catch (err) {
+        console.error("[RESULT] Error parsing Result page:", err.message);
+      }
+      
+      if (gradecardsFound > 0 && parsedResults.length === 0) {
+          throw new Error("RESULT_EXTRACTION_FAILED");
+      }
+    }
+
     // Merge PCA data into CA data
-    if (caMarksData && pcaMarksData) {
+    if (caMarksData && caMarksData.semesters && pcaMarksData && pcaMarksData.semesters) {
       caMarksData.semesters.forEach(sem => {
         const pcaSem = pcaMarksData.semesters.find(s => s.semester === sem.semester);
-        if (pcaSem) {
+        if (pcaSem && pcaSem.subjects) {
+          sem.subjects = sem.subjects || [];
           sem.subjects.forEach(sub => {
-            const pcaSub = pcaSem.subjects.find(ps => ps.subject.toLowerCase() === sub.subject.toLowerCase());
+            if (!sub || !sub.subject) return;
+            const pcaSub = pcaSem.subjects.find(ps => ps?.subject?.toLowerCase() === sub.subject.toLowerCase());
             if (pcaSub) {
               console.log(`[MERGE] Semester ${sem.semester} | Match found for ${sub.subject}`);
               sub.pa1 = pcaSub.pa1;
@@ -345,19 +507,22 @@ app.post("/verify-student", async (req, res) => {
           sem = { semester: pcaSem.semester, subjects: [] };
           caMarksData.semesters.push(sem);
         }
-        pcaSem.subjects.forEach(pcaSub => {
-          const sub = sem.subjects.find(s => s.subject.toLowerCase() === pcaSub.subject.toLowerCase());
-          if (!sub) {
-            console.log(`[MERGE] Semester ${pcaSem.semester} | Adding PA-only subject ${pcaSub.subject}`);
-            sem.subjects.push({
-              subject: pcaSub.subject,
-              subjectCode: pcaSub.subjectCode,
-              teacher: pcaSub.teacher,
-              ca1: null, ca2: null, ca3: null, ca4: null,
-              pa1: pcaSub.pa1, pa2: pcaSub.pa2
-            });
-          }
-        });
+        if (pcaSem.subjects) {
+          pcaSem.subjects.forEach(pcaSub => {
+            if (!pcaSub || !pcaSub.subject) return;
+            const sub = sem.subjects.find(s => s?.subject?.toLowerCase() === pcaSub.subject.toLowerCase());
+            if (!sub) {
+              console.log(`[MERGE] Semester ${pcaSem.semester} | Adding PA-only subject ${pcaSub.subject}`);
+              sem.subjects.push({
+                subject: pcaSub.subject,
+                subjectCode: pcaSub.subjectCode,
+                teacher: pcaSub.teacher,
+                ca1: null, ca2: null, ca3: null, ca4: null,
+                pa1: pcaSub.pa1, pa2: pcaSub.pa2
+              });
+            }
+          });
+        }
       });
     }
 
@@ -477,7 +642,7 @@ app.post("/verify-student", async (req, res) => {
     console.log(`[SUPABASE] Student upserted successfully (roll: ${student.rollNumber})`);
 
     // ── Step 9.5: Upsert CA Marks into Supabase ──────────────────────────────
-    if (caMarksData && caMarksData.semesters.length > 0) {
+    if (caMarksData && caMarksData.semesters && caMarksData.semesters.length > 0) {
       const marksRecords = [];
       let totalSubjectsParsed = 0;
 
@@ -521,10 +686,87 @@ app.post("/verify-student", async (req, res) => {
       }
     }
 
+    // ── NEW STEP 1.10: Upsert Parsed PDF Results into Supabase ─────────────────
+    if (typeof parsedResults !== 'undefined' && parsedResults.length > 0) {
+      console.log(`[RESULTS BEFORE DEDUP] ${parsedResults.length}`);
+
+      // Deduplicate parsedResults by semester
+      const dedupedResults = [];
+      const semesterMap = new Map();
+
+      parsedResults.forEach(res => {
+         if (!res.semester) return;
+         const existing = semesterMap.get(res.semester);
+         
+         if (!existing) {
+            semesterMap.set(res.semester, res);
+         } else {
+            // Resolution logic: prefer valid SGPA, else prefer more subjects
+            if (res.sgpa && !existing.sgpa) {
+               semesterMap.set(res.semester, res);
+            } else if (!existing.sgpa && !res.sgpa && res.subjects.length > existing.subjects.length) {
+               semesterMap.set(res.semester, res);
+            }
+         }
+      });
+      
+      parsedResults = Array.from(semesterMap.values());
+      console.log(`[RESULTS AFTER DEDUP] ${parsedResults.length}`);
+
+      const resultsRecords = [];
+      const gradesRecords = [];
+      
+      parsedResults.forEach(res => {
+         resultsRecords.push({
+            roll_number: student.rollNumber,
+            semester: String(res.semester),
+            sgpa: res.sgpa || null,
+            cgpa: res.cgpa || null,
+            result_date: null,
+            created_at: new Date().toISOString()
+         });
+         
+         res.subjects.forEach(sub => {
+            if (!sub.subjectCode) return;
+            gradesRecords.push({
+               roll_number: student.rollNumber,
+               semester: String(res.semester),
+               subject_code: sub.subjectCode,
+               subject_name: sub.subjectName || null,
+               grade: sub.grade || null,
+               credits: sub.credits || null
+            });
+         });
+      });
+      
+      if (resultsRecords.length > 0) {
+         const { error: resErr } = await supabase.from('student_results').upsert(resultsRecords, { onConflict: 'roll_number, semester' });
+         if (resErr) console.error("[SUPABASE] Failed to upsert student_results:", resErr.message);
+         else console.log(`[SEMESTERS SAVED] ${resultsRecords.length}`);
+      }
+      
+      if (gradesRecords.length > 0) {
+         // Requires: ALTER TABLE student_grades ADD CONSTRAINT unique_student_grade UNIQUE (roll_number, semester, subject_code);
+         const { error: gradErr } = await supabase.from('student_grades').upsert(gradesRecords, { onConflict: 'roll_number, semester, subject_code' });
+         if (gradErr) console.error("[SUPABASE] Failed to upsert student_grades:", gradErr.message);
+         else console.log(`[GRADES SAVED] ${gradesRecords.length}`);
+      }
+      
+      console.log("[RESULTS PARSED]\n" + JSON.stringify(parsedResults, null, 2));
+      console.log("[RESULT COUNT]", parsedResults.length);
+    } else {
+      console.log("[RESULT COUNT] 0");
+    }
+
+    console.log("[FINAL RESULTS JSON]");
+    console.log(JSON.stringify(parsedResults, null, 2));
+    console.log("[FINAL COUNT]", parsedResults.length);
+
     // ── Step 10: Return clean production response ─────────────────────────────
     return res.json({
       verified: true,
       student,
+      results: typeof parsedResults !== 'undefined' ? parsedResults : [],
       savedToSupabase,
       supabaseError: null,
       dashboardCaptured,
@@ -573,6 +815,7 @@ app.post("/verify-student", async (req, res) => {
  * This is resilient to row reordering.
  */
 function extractStudentData(html) {
+  if (!html) return {};
   const $ = cheerio.load(html);
 
   // Build a normalised label → value dictionary from the main data table
@@ -637,6 +880,7 @@ function extractStudentData(html) {
 
 // ─── extractCaMarks ──────────────────────────────────────────────────────────
 function extractCaMarks(html) {
+  if (!html) return { semesters: [] };
   const $ = cheerio.load(html);
 
   const semestersData = {};
@@ -722,6 +966,7 @@ function extractCaMarks(html) {
 
 // ─── extractPcaMarks ─────────────────────────────────────────────────────────
 function extractPcaMarks(html) {
+  if (!html) return { semesters: [] };
   const $ = cheerio.load(html);
 
   const semestersData = {};
@@ -795,6 +1040,8 @@ function extractPcaMarks(html) {
 
   return { semesters };
 }
+
+// Old parser functions removed; logic moved to services/resultParser.js
 
 // ─── GET /debug/student-html — serve saved HTML for browser inspection ────────
 app.get("/debug/student-html", (req, res) => {
@@ -1117,6 +1364,66 @@ app.get("/student/:rollNumber/internal-marks", async (req, res) => {
     });
   } catch (err) {
     console.error("[API] Error in GET internal marks:", err.message);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// ─── GET /student/:rollNumber/results — Production API ────────────────────────
+app.get("/student/:rollNumber/results", async (req, res) => {
+  const { rollNumber } = req.params;
+  console.log(`[API] GET /student/${rollNumber}/results requested`);
+
+  try {
+    const { data: results, error: resErr } = await supabase
+      .from("student_results")
+      .select("*")
+      .eq("roll_number", rollNumber)
+      .order("semester", { ascending: false });
+
+    if (resErr) return res.status(500).json({ success: false, message: resErr.message });
+    
+    if (!results || results.length === 0) {
+      return res.json({ success: true, semesters: [] });
+    }
+    
+    const { data: grades, error: gradErr } = await supabase
+      .from("student_grades")
+      .select("*")
+      .eq("roll_number", rollNumber);
+      
+    if (gradErr) return res.status(500).json({ success: false, message: gradErr.message });
+
+    const semestersMap = {};
+    results.forEach(r => {
+      semestersMap[r.semester] = {
+         semester: r.semester,
+         sgpa: r.sgpa,
+         cgpa: r.cgpa,
+         subjects: []
+      };
+    });
+    
+    if (grades) {
+       grades.forEach(g => {
+          if (semestersMap[g.semester]) {
+             semestersMap[g.semester].subjects.push({
+                subjectCode: g.subject_code,
+                subjectName: g.subject_name,
+                grade: g.grade,
+                credits: g.credits
+             });
+          }
+       });
+    }
+
+    const semesters = Object.values(semestersMap).sort((a, b) => Number(b.semester) - Number(a.semester));
+
+    return res.json({
+      success: true,
+      semesters
+    });
+  } catch (err) {
+    console.error("[API] Error in GET results:", err.message);
     return res.status(500).json({ success: false, message: err.message });
   }
 });

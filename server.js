@@ -9,6 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
 const { extractPdfText, buildResultObject } = require("./services/resultParser");
+const cors = require("cors");
 
 // ─── Supabase client (service role — bypasses RLS) ────────────────────────────
 console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
@@ -26,6 +27,19 @@ const supabase = createClient(
 })();
 
 const app = express();
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:8081",
+      "https://campushubq.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
+app.options("*", cors());
 app.use(express.json());
 
 // ─── Health check ─────────────────────────────────────────────────────────────

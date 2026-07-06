@@ -28,14 +28,42 @@ const supabase = createClient(
 
 const app = express();
 
+const allowedDomains = [
+  "https://campushubq.vercel.app", // Main production domain
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:8081",
-      "https://campushubq.vercel.app",
-    ],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin) return callback(null, true);
+
+      // Allow specific production domains
+      if (allowedDomains.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow all localhost and local network development ports
+      if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow all Vercel deployments (*.vercel.app)
+      if (/^https:\/\/[a-zA-Z0-9-]+\.vercel\.app$/.test(origin)) {
+        return callback(null, true);
+      }
+      
+      // Allow Render deployments
+      if (/^https:\/\/[a-zA-Z0-9-]+\.onrender\.com$/.test(origin)) {
+        return callback(null, true);
+      }
+
+      console.warn(`[CORS] Blocked request from unauthorized origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
   })
 );
 
@@ -1478,7 +1506,7 @@ app.get("/verify/:studentId", async (req, res) => {
   }
 });
 
-// ─── Start server ─────────────────────────────────────────────────────────────
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });

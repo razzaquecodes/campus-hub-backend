@@ -1506,6 +1506,142 @@ app.get("/verify/:studentId", async (req, res) => {
   }
 });
 
+// ─── POST /provision-student — Provision Supabase user after MAKAUT verification ───
+app.post("/provision-student", async (req, res) => {
+  const { rollNumber, password } = req.body || {};
+  if (!rollNumber || !password) {
+    return res.status(400).json({ success: false, message: "rollNumber and password are required" });
+  }
+
+  try {
+    // Call local verification endpoint to reuse MAKAUT logic and get student details
+    const localPort = process.env.PORT || 3000;
+    const verifyUrl = `http://127.0.0.1:${localPort}/verify-student`;
+    console.log(`[PROVISION] Calling local verify endpoint: ${verifyUrl} for ${rollNumber}`);
+
+    let verifyResp;
+    try {
+      verifyResp = await axios.post(verifyUrl, { rollNumber, password }, { timeout: 120000 });
+    } catch (err) {
+      // If the internal verify endpoint intentionally returned non-2xx (401 for bad creds), axios throws — capture the response
+      if (err && err.response && err.response.data) {
+        const verification = err.response.data;
+        if (!verification.verified) {
+          // Forward the verification failure with same status
+          const status = err.response.status || 401;
+          return res.status(status).json({ success: false, message: 'MAKAUT verification failed', details: verification });
+        }
+      }
+      console.error('[PROVISION] Error calling local verify endpoint:', err.message);
+      return res.status(502).json({ success: false, message: 'Failed to verify student', error: err.message });
+    }
+
+    if (!verifyResp || !verifyResp.data) {
+      return res.status(502).json({ success: false, message: "Failed to verify student" });
+    }
+    const verification = verifyResp.data;
+    if (!verification.verified) {
+      return res.status(401).json({ success: false, message: "MAKAUT verification failed", details: verification });
+    }
+
+    const student = verification.student;
+    if (!student || !student.rollNumber) {
+      return res.status(500).json({ success: false, message: "Verified but student details missing" });
+    }
+
+    // Derive email for Supabase user. Prefer real student email if available.
+    let email = (student.email || "").trim();
+    if (!email) {
+      // Use internal domain to avoid conflicts — never expose this to clients
+      email = `${student.rollNumber}@campushub.internal`;
+    }
+
+    // Generate a strong random password for the Supabase account if email came from MAKAUT (or reuse provided password?)
+    // We will create user with a server-generated password and then sign in to return session tokens to client.
+    const { randomBytes } = require('crypto');
+    const generatedPassword = randomBytes(24).toString('base64');
+
+    // Try to create user via Supabase Admin API (service role key required)
+    console.log(`[PROVISION] Creating or fetching Supabase user for email=${email}`);
+
+    let createdUser = null;
+    try {
+      const { data: createData, error: createError } = await supabase.auth.admin.createUser({
+        email,
+        password: generatedPassword,
+        email_confirm: true,
+        user_metadata: {
+          roll_number: student.rollNumber,
+          full_name: student.fullName || null,
+          institute_name: student.instituteName || null,
+        }
+      });
+
+      if (createError) {
+        // If user already exists, we'll try to find it
+        console.warn(`[PROVISION] createUser error: ${createError.message}`);
+      } else {
+        createdUser = createData;
+        console.log('[PROVISION] User created via admin.createUser:', createdUser?.id);
+      }
+    } catch (err) {
+      console.error('[PROVISION] admin.createUser threw:', err.message);
+    }
+
+    // If creation failed (likely because user exists), try to find user by listing users (filter by email)
+    let userRecord = createdUser;
+    if (!userRecord) {
+      try {
+        const { data: listData, error: listError } = await supabase.auth.admin.listUsers({});
+        if (listError) {
+          console.error('[PROVISION] listUsers error:', listError.message);
+        } else if (listData && listData.users) {
+          userRecord = listData.users.find(u => (u.email || '').toLowerCase() === email.toLowerCase());
+          if (userRecord) console.log('[PROVISION] Found existing user by email:', userRecord.id);
+        }
+      } catch (err) {
+        console.error('[PROVISION] listUsers threw:', err.message);
+      }
+    }
+
+    if (!userRecord) {
+      return res.status(500).json({ success: false, message: 'Failed to create or locate Supabase user' });
+    }
+
+    // If user was found but we did not create it now, reset their password to our generatedPassword so we can create a session
+    try {
+      await supabase.auth.admin.updateUserById(userRecord.id, { password: generatedPassword });
+      console.log('[PROVISION] Updated password for user id', userRecord.id);
+    } catch (err) {
+      // If updateUserById is not available, skip — we'll attempt sign-in anyway
+      console.warn('[PROVISION] updateUserById failed or unavailable:', err.message);
+    }
+
+    // Now sign in to obtain session tokens. Use client with service role key — this will return an access token.
+    const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password: generatedPassword
+    });
+
+    if (signInError) {
+      console.error('[PROVISION] signInWithPassword error:', signInError.message);
+      return res.status(500).json({ success: false, message: 'Provisioned user but failed to create session', error: signInError.message });
+    }
+
+    // Return the session and user info to the client — frontend can store session in local state
+    return res.json({
+      success: true,
+      message: 'User provisioned',
+      student,
+      supabaseUserId: userRecord.id,
+      session: signInData.session
+    });
+  } catch (err) {
+    console.error('[PROVISION] Unexpected error:', err.message);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

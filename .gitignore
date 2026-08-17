@@ -1,0 +1,5 @@
+# Local environment files
+.env
+.env.*
+# Keep an example file in repo
+!.env.example

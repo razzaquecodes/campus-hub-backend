@@ -1549,11 +1549,12 @@ app.post("/provision-student", async (req, res) => {
       return res.status(500).json({ success: false, message: "Verified but student details missing" });
     }
 
-    // Derive email for Supabase user. Prefer real student email if available.
-    let email = (student.email || "").trim();
+    // Derive email for Supabase user. Require a real student email from MAKAUT.
+    const email = (student.email || "").trim();
     if (!email) {
-      // Use internal domain to avoid conflicts — never expose this to clients
-      email = `${student.rollNumber}@campushub.internal`;
+      // Do NOT invent fallback emails — fail provisioning if MAKAUT did not provide an email
+      console.warn('[PROVISION] No email available from MAKAUT for', student.rollNumber);
+      return res.status(422).json({ success: false, message: 'Cannot provision user: student email missing from MAKAUT verification' });
     }
 
     // Generate a strong random password for the Supabase account if email came from MAKAUT (or reuse provided password?)

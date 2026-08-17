@@ -1639,11 +1639,14 @@ app.post("/provision-student", async (req, res) => {
     };
 
     // Return the session and user info to the client — frontend can store session in local state
+    const accessTokenMasked = rawSession.access_token === '******' || rawSession.access_token === undefined || rawSession.access_token === null;
+
     return res.json({
       success: true,
       message: 'User provisioned',
       student,
       supabaseUserId: userRecord.id,
+      accessTokenMasked,
       session: rawSession
     });
   } catch (err) {

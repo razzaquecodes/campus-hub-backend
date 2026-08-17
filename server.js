@@ -1629,13 +1629,22 @@ app.post("/provision-student", async (req, res) => {
       return res.status(500).json({ success: false, message: 'Provisioned user but failed to create session', error: signInError.message });
     }
 
+    // Build a plain session object (avoid returning SDK-wrapped objects which may mask tokens)
+    const rawSession = {
+      access_token: signInData?.session?.access_token,
+      refresh_token: signInData?.session?.refresh_token,
+      expires_in: signInData?.session?.expires_in,
+      expires_at: signInData?.session?.expires_at,
+      user: signInData?.user || signInData?.session?.user || null
+    };
+
     // Return the session and user info to the client — frontend can store session in local state
     return res.json({
       success: true,
       message: 'User provisioned',
       student,
       supabaseUserId: userRecord.id,
-      session: signInData.session
+      session: rawSession
     });
   } catch (err) {
     console.error('[PROVISION] Unexpected error:', err.message);
